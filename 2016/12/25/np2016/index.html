@@ -102,7 +102,7 @@
 <meta property="og:image" content="http://imglf1.nosdn.127.net/img/RkxIaHRUZ2s2MlZpR1BxMlZHRDI5UzlXTHdsNkpndE95VkYxZE9NZ09zNWc0ZG0zNDhPb2hRPT0.png?imageView&thumbnail=1680x0&quality=96&stripmeta=0&type=jpg">
 <meta property="og:image" content="http://imglf1.nosdn.127.net/img/RkxIaHRUZ2s2MlhqcWpUWFl6ek1qWHNPUVNSTFVORDArYWhLU0dTdjd6RXZ4ZkJLM2ViaDZRPT0.png?imageView&thumbnail=1680x0&quality=96&stripmeta=0&type=jpg">
 <meta property="og:image" content="http://imglf.nosdn.127.net/img/RkxIaHRUZ2s2MlVwRmlrdk9hdW5UR2hTakNzZ0lNS202NFJMUkc0OE1zTDdGK0NTbWFac1hBPT0.png?imageView&thumbnail=1680x0&quality=96&stripmeta=0&type=jpg">
-<meta property="og:updated_time" content="2016-12-29T11:03:12.599Z">
+<meta property="og:updated_time" content="2016-12-29T12:32:18.680Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="网络程序设计学习总结">
 <meta name="twitter:description" content="-----小白学习成长记录 by 夏天">
@@ -353,7 +353,7 @@
 <h3 id="项目地址" style="text-align:center"><a href="#项目地址" class="headlink" title="项目地址">项目地址</a></h3>
 
 <h4 id="项目托管地址-gt"><a href="#项目托管地址-gt" class="headerlink" title="项目托管地址&gt;"></a>项目托管地址&gt;</h4><p>&ensp; &emsp;coding.net：<a href="https://coding.net/u/summer007/p/np2016/git" title="BloodTestReportPrediction" target="_blank" rel="external">BloodTestReportPrediction</a></p>
-<h4 id="项目演示地址-gt"><a href="#项目演示地址-gt" class="headerlink" title="项目演示地址&gt;"></a>项目演示地址&gt;</h4><p>&ensp; &emsp;DO旧金山服务器：<a href="http://np2016.summer007.com/" target="_blank" rel="external">BloodTestOCR Demo</a></p>
+<h4 id="项目演示地址-gt"><a href="#项目演示地址-gt" class="headerlink" title="项目演示地址&gt;"></a>项目演示地址&gt;</h4><p>&ensp; &emsp;DO旧金山服务器（网速有点慢，不过学生有优惠券，便宜好用）：<a href="http://np2016.summer007.com/" target="_blank" rel="external">BloodTestOCR Demo</a></p>
 <p>&ensp; &emsp;示例图片地址：<a href="https://coding.net/u/summer007/p/np2016/git/tree/master/BloodTestReportOCR/origin_pics" target="_blank" rel="external">示例图片</a></p>
 <p>&ensp; &emsp;采用Flask + uWSGI + Supervisor 搭建，保证程序满足多线程访问需求，且出错crash后或者更新后能自启（PS：服务器只续租一月，过期后关闭该功能，博主没钱啊&gt;_&lt;）</p>
 <h3 id="项目功能" style="text-align:center"><a href="#项目功能" class="headlink" title="项目功能">项目功能</a></h3>
@@ -455,7 +455,7 @@
 <p><img src="http://imglf1.nosdn.127.net/img/RkxIaHRUZ2s2MlhqcWpUWFl6ek1qWHNPUVNSTFVORDArYWhLU0dTdjd6RXZ4ZkJLM2ViaDZRPT0.png?imageView&amp;thumbnail=1680x0&amp;quality=96&amp;stripmeta=0&amp;type=jpg" alt="数据格式"></p>
 <h3 id="进行预测" style="text-align:center"><a href="#进行预测" class="headlink" title="进行预测">进行预测</a></h3>
 
-<p>&ensp; &emsp;终于到了本项目最为核心的功能了，然而惭愧的是博主学了七周的神经网络，却只熟悉了caffe网络的用法，不过caffe网络并不适用于本项目（因为本项目数据特征固定【26项血常规数据】，数据矩阵为1x1【一人对应一项数据】，强大的卷积层在本项目中毫无用处，或者说博主并不会使用）。故不在此介绍，读者有兴趣可以查阅coding.net中caffe目录资料。</p>
+<p>&ensp; &emsp;终于到了本项目最为核心的功能了，然而惭愧的是博主学了七周的神经网络，却只熟悉了caffe网络的用法，不过caffe网络并不适用于本项目（因为本项目数据特征固定【26项血常规数据】，数据矩阵为1x1【一人对应一项数据】，强大的卷积层在本项目中毫无用处，或者说博主并不知其正确用法）。故不在此介绍，有兴趣的读者可以查阅coding.net中caffe目录资料。</p>
 <p>&ensp; &emsp;本次项目采用的是tensorflow预测年龄性别。服务器上采用的是训练好的模型进行预测。预测效果图如下：<br><img src="http://imglf.nosdn.127.net/img/RkxIaHRUZ2s2MlVwRmlrdk9hdW5UR2hTakNzZ0lNS202NFJMUkc0OE1zTDdGK0NTbWFac1hBPT0.png?imageView&amp;thumbnail=1680x0&amp;quality=96&amp;stripmeta=0&amp;type=jpg" alt="预测结果"></p>
 <p>当然因为多种原因（参数未修正，数据量不大，数据精度etc..）因此年龄识别率不高，不过性别识别率还是可以接受的。</p>
 <p>预测流程：</p>
@@ -477,10 +477,11 @@
 <p> 有关于与tensorflow的使用网上博客介绍的很详细，如<a href="http://wiki.jikexueyuan.com/project/tensorflow-zh/" target="_blank" rel="external">tensorflow官方文档中文版</a>。这里就不赘述了，主要说明一下之前无法多次预测的bug产生原因和解决方案</p>
 <p> BUG原因：</p>
 <p>在tensorflow中以图来表示执行任务，在每次程序运行时，全局只会默认调用一次<code>self.create_network()</code> 指定一个特定图，并将所有变量收集并包装起来，在第一次正常调用<code>tf.train.Saver()</code>创建<code>saver</code>时会为收集好的变量赋上自动生成的名字。</p>
-<p>这样在之后每次调用<code>tf_predict.py</code>中的<code>predict</code>函数时，因为没有指定特定<code>graph</code>，同时之前没有调用<code>self.create_network()</code>，<code>saver = tf.train.Saver()</code>会构造一个默认的<code>saver</code>但是此刻自动生成的名字域里是没有收集到任何变量的，而且因为域名不对，在<code>checkpoint</code>也找不到对应变量，自然就会报错。报错的形式为在<code>checkpoint</code>中找不到变量</p>
+<p>这样在之后每次调用<code>tf_predict.py</code>中的<code>predict</code>函数时，因为没有指定特定<code>graph</code>，同时之前没有调用<code>self.create_network()</code>，<code>saver = tf.train.Saver()</code>会构造一个默认的<code>saver</code>但是此刻自动生成的名字域里是没有收集到任何变量的，而且因为域名不对，在<code>checkpoint</code>也找不到对应变量，自然就会报错。报错的形式为在<code>checkpoint</code>中找不到变量。</p>
+<p>同时<code>saver</code>还有另一个值得注意的特性：当前后添加的两个变量名相同时，<code>saver</code>会简单的将第二个变量名赋名为variable_(i+1)，这样在查找时需要注意变量的对应关系。</p>
 <p>解决方案有两种：</p>
 <ol>
-<li>指定固定的<code>graph</code>，（如博主用的就是每次设定图为<code>tf</code>默认图）</li>
+<li>指定固定的<code>graph</code>，（如博主用的就是每次设定图为<code>tf</code>默认图）<code>tf.reset_default_graph()</code></li>
 <li>在每次调用<code>predict</code>都重新完全创建一个<code>graph</code>,<code>create_network</code>,再构建<code>saver</code>。这种方法的缺陷显而易见，很浪费资源。</li>
 </ol>
 <p>以上就是这次项目demo的完整流程，当然课程项目中还会涉及许许多多的算法学习以及平台使用，大部分资料都已经托管在了coding.net上，可以自行查阅。 </p>
