@@ -94,7 +94,7 @@
 <meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/image/Ubuntu/Python~%5BCOI%605~LS%29L%28ZBCS%28%25%28%252U.png">
 <meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/image/Ubuntu/Python%281@OJPWG2U7%5BR9%60Q%7D~AJ~%60Y.png">
 <meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/image/Ubuntu/PythonN3%7B@0%5DTU5@9P%7BE%7BEDGKXO2L.png">
-<meta property="og:updated_time" content="2016-12-29T16:57:49.286Z">
+<meta property="og:updated_time" content="2017-01-02T14:36:20.684Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BloodTestOCR搭建服务器避坑指南">
 <meta name="twitter:description" content="在全新服务器上搭建demo的流程">
@@ -276,7 +276,17 @@
             
 
             
+              <span class="post-meta-divider">|</span>
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              <span class="post-meta-item-text">更新于</span>
+              <time title="更新于" itemprop="dateModified" datetime="2017-01-02T22:36:20+08:00">
+                2017-01-02
+              </time>
             
           </span>
 
@@ -348,6 +358,7 @@
 <blockquote>
 <p>原文链接：<a href="http://www.cnblogs.com/Ray-liang/p/4173923.html" target="_blank" rel="external">http://www.cnblogs.com/Ray-liang/p/4173923.html</a> </p>
 <p>作者： Ray</p>
+<p>2017.1.2日晚BUG修复更新：<br>在进行生成报告和predict的时候会产生502 Bad GateWay nginx错误<br>经调查验证是运行uwsgi时，大量数据传输超过uwsgi缓冲大小原因所致（找了三四天的资料，最后看log日志发现的错，以后找原因还是得找日志)<br>修改添加了缓冲区设置</p>
 </blockquote>
 <ul>
 <li>安装 uWSGI</li>
@@ -356,7 +367,7 @@
 <ul>
 <li>配置 uWSGI： 在项目目录（np2016/BloodTestReportOCR）下新建config.ini,其内容为：</li>
 </ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><div class="line">[uwsgi]</div><div class="line"></div><div class="line"><span class="meta"># uwsgi 启动时所使用的地址与端口，不要与flask冲突</span></div><div class="line">socket = <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">8000</span> </div><div class="line"></div><div class="line"># 指向网站目录</div><div class="line">chdir = /your_file_path/np2016/BloodTestReportOCR/ </div><div class="line"></div><div class="line"># python 启动程序文件</div><div class="line">wsgi-file = view.py </div><div class="line"></div><div class="line"># python 程序内用以启动的 application 变量名</div><div class="line">callable = app </div><div class="line"></div><div class="line"># 处理器数</div><div class="line">processes = <span class="number">1</span></div><div class="line"></div><div class="line"># 线程数</div><div class="line">threads = <span class="number">70</span></div><div class="line"></div><div class="line">#状态检测地址</div><div class="line">stats = <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">9191</span></div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><div class="line">[uwsgi]</div><div class="line"></div><div class="line"><span class="comment"># uwsgi 启动时所使用的地址与端口，不要与flask冲突</span></div><div class="line">socket = <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">8000</span> </div><div class="line"></div><div class="line"><span class="comment"># 指向网站目录</span></div><div class="line">chdir = /your_file_path/np2016/BloodTestReportOCR/ </div><div class="line"></div><div class="line"><span class="comment"># python 启动程序文件</span></div><div class="line">wsgi-file = view.py </div><div class="line"></div><div class="line"><span class="comment">#缓冲区设置64K	</span></div><div class="line">buffer-size = <span class="number">65535</span></div><div class="line"></div><div class="line"><span class="comment"># python 程序内用以启动的 application 变量名</span></div><div class="line">callable = app </div><div class="line"></div><div class="line"><span class="comment"># 处理器数</span></div><div class="line">processes = <span class="number">1</span></div><div class="line"></div><div class="line"><span class="comment"># 线程数</span></div><div class="line">threads = <span class="number">70</span></div><div class="line"></div><div class="line"><span class="comment">#状态检测地址</span></div><div class="line">stats = <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">9191</span></div></pre></td></tr></table></figure>
 <ul>
 <li>运行 uWSGI（2016.12.29 15:48 修改）</li>
 </ul>
@@ -578,7 +589,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
