@@ -1,0 +1,723 @@
+<!doctype html>
+
+
+
+  
+
+<script type="text/javascript" src="/js/src/partical.js"></script>
+<script type="text/javascript" src="/js/src/love.js"></script>
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="趁着服务器还没过期，尝试了下python的微信端建立，将一些经验记录下来，python可比JS麻烦多了..">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BloodTestOCR微信端简单功能实现经验谈">
+<meta property="og:url" content="http://github.summer007.com/2017/01/05/BloodTestOCRWeixin/index.html">
+<meta property="og:site_name" content="Dream World">
+<meta property="og:description" content="趁着服务器还没过期，尝试了下python的微信端建立，将一些经验记录下来，python可比JS麻烦多了..">
+<meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/TUCI23_0QQS6KR%28OU9NCNVG.png">
+<meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/image/Ubuntu/PythonH55L7WX0~9TE%5D0391X0MBMB.png">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1741029-37bf82ef50e6d39c.png?imageMogr2/auto-orient/strip%7CimageView2/2">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1741029-5e665e8d59d0c33b.png?imageMogr2/auto-orient/strip%7CimageView2/2">
+<meta property="og:updated_time" content="2017-01-06T07:34:22.178Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="BloodTestOCR微信端简单功能实现经验谈">
+<meta name="twitter:description" content="趁着服务器还没过期，尝试了下python的微信端建立，将一些经验记录下来，python可比JS麻烦多了..">
+<meta name="twitter:image" content="http://oiwadb81v.bkt.clouddn.com/TUCI23_0QQS6KR%28OU9NCNVG.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6368841604588897000',
+      author: 'Summer君'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://github.summer007.com/2017/01/05/BloodTestOCRWeixin/"/>
+
+
+
+
+
+  <title> BloodTestOCR微信端简单功能实现经验谈 | Dream World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Dream World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://github.summer007.com/2017/01/05/BloodTestOCRWeixin/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Summer007">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Dream World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Dream World" src="/images/conquest.jpg">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                BloodTestOCR微信端简单功能实现经验谈
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-01-05T14:21:26+08:00">
+                2017-01-05
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              <span class="post-meta-item-text">更新于</span>
+              <time title="更新于" itemprop="dateModified" datetime="2017-01-06T15:34:22+08:00">
+                2017-01-06
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="/2017/01/05/BloodTestOCRWeixin/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/05/BloodTestOCRWeixin/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+              <div class="post-description">
+                  趁着服务器还没过期，尝试了下python的微信端建立，将一些经验记录下来，python可比JS麻烦多了..
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文主要是学习BloodTestOCR微信公众号开发的python写法，记录下来以后万一用到了就可以直接照搬了,当然还可能有许多bug及功能未完善，以后可能会继续在此完善。</p>
+<p>代码托管地址是：<a href="https://coding.net/u/summer008/p/np2016/git/tree/weixin/BloodTestReportOCR" target="_blank" rel="external">coding.net</a></p>
+<h2 id="微信端搭建"><a href="#微信端搭建" class="headerlink" title="微信端搭建"></a>微信端搭建</h2><ul>
+<li>首先搭建uwsgi框架以适应高并发以及作为服务器端后台服务的需求</li>
+<li>同时用nginx反向代理80端口（因为微信要求必须用80端口）详细搭建教程整理在了博客上面，这里就给个链接了—<a href="http://www.github.summer007.com/2016/12/28/BloodTestOCRDemo/" target="_blank" rel="external">传送门</a>搭建成功后应当能在你的域名下看到web端demo页面</li>
+</ul>
+<p>（关于微信搭建教程，老师的<a href="https://coding.net/u/summer008/p/kingke/git" target="_blank" rel="external">kingke</a>项目里有很多资料，大家可以参阅）</p>
+<ul>
+<li>首先修改wxConfig.py里的变量值，填入你的公众测试号信息</li>
+<li>运行config.ini,启动nginx代理服务<figure class="highlight livecodeserver"><table><tr><td class="code"><pre><div class="line">sudo uwsgi <span class="comment">--ini config.ini</span></div><div class="line">sudo service nginx <span class="built_in">start</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>在微信公众测试号平台：<a href="http://mp.weixin.qq.com/debug/cgi-bin/sandbox?t=sandbox/login" target="_blank" rel="external">微信公众测试号平台</a><br>绑定域名成功后，在页面输入 你的域名/setmenu 设置你的微信公众号菜单就完成了微信搭建</p>
+<h3 id="功能说明"><a href="#功能说明" class="headerlink" title="功能说明"></a>功能说明</h3><p>已经实现了上传图片和预测年龄性别的功能<br>但还存在很多缺陷，大致有：<br>  一、微信服务器是五秒内不回复，断开尝试新连接，尝试三次后关闭，而程序响应时间（OCR）太长，所以没法做回复。<br>  return的response在微信服务器端拒收<br>  二、没来得及作报告生成模块和修改模块。想法是：可以将web端模块封装起来，共用。<br>  三、目前识别精度低，不知是哪一步转码降低了精度，不过图片切割清晰度尚可，准确度也可以</p>
+<h3 id="文件说明"><a href="#文件说明" class="headerlink" title="文件说明"></a>文件说明</h3><h4 id="wxConfig-py"><a href="#wxConfig-py" class="headerlink" title="wxConfig.py"></a>wxConfig.py</h4><p>微信公众测试号的配置信息</p>
+<h4 id="wx-py"><a href="#wx-py" class="headerlink" title="wx.py"></a>wx.py</h4><p>微信功能函数封装</p>
+<h4 id="config-ini"><a href="#config-ini" class="headerlink" title="config.ini"></a>config.ini</h4><p>uwsgi配置文件</p>
+<h4 id="view-py"><a href="#view-py" class="headerlink" title="view.py"></a>view.py</h4><p>增加了/setmenu 设置菜单路由<br>和 /weixin 功能路由</p>
+<h2 id="代码注解"><a href="#代码注解" class="headerlink" title="代码注解"></a>代码注解</h2><p>本次开发对象是微信公众测试号，进入公众平台后再坐下角点击开发者工具<br>就能在左边找到公众平台测试账号了。</p>
+<p><img src="http://oiwadb81v.bkt.clouddn.com/TUCI23_0QQS6KR%28OU9NCNVG.png" alt="微信"></p>
+<p>首先需要先绑定微信号的域名：</p>
+<p><img src="http://oiwadb81v.bkt.clouddn.com/image/Ubuntu/PythonH55L7WX0~9TE%5D0391X0MBMB.png" alt="微信域名绑定"></p>
+<p>###简单的微信端介绍：</p>
+<blockquote>
+<p>博文名:python+flask+sae+微信公众号开发后记</p>
+<p>作者:HalShaw</p>
+<p>博客地址:<a href="http://www.jianshu.com/p/264d55f8d652" target="_blank" rel="external">http://www.jianshu.com/p/264d55f8d652</a></p>
+<p>首先是理解一下数据的具体传输过程，其实flask就起了个传递值的作用。<br>（PS：在本项目中还有NGINX和UWSGI框架，也是起传值，传请求的作用）<br><img src="http://upload-images.jianshu.io/upload_images/1741029-37bf82ef50e6d39c.png?imageMogr2/auto-orient/strip%7CimageView2/2" alt="传值流程图"></p>
+</blockquote>
+<p>###具体流程：</p>
+<blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/1741029-5e665e8d59d0c33b.png?imageMogr2/auto-orient/strip%7CimageView2/2" alt="接入微信公众号流程"></p>
+</blockquote>
+<h3 id="绑定代码如下："><a href="#绑定代码如下：" class="headerlink" title="绑定代码如下："></a>绑定代码如下：</h3><figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">check_weixin</span><span class="params">(request)</span>:</span></div><div class="line">    token = wxConfig.token</div><div class="line">    data = request.args</div><div class="line">    signature = data.get(<span class="string">'signature'</span>, <span class="string">''</span>)</div><div class="line">    timestamp = data.get(<span class="string">'timestamp'</span>, <span class="string">''</span>)</div><div class="line">    nonce = data.get(<span class="string">'nonce'</span>, <span class="string">''</span>)</div><div class="line">    echostr = data.get(<span class="string">'echostr'</span>, <span class="string">''</span>)</div><div class="line">    s = [timestamp, nonce, token]</div><div class="line">    s.sort()</div><div class="line">    s = <span class="string">''</span>.join(s)</div><div class="line">    <span class="keyword">if</span> (hashlib.sha1(s).hexdigest() == signature):</div><div class="line">        <span class="keyword">return</span> echostr</div><div class="line">    <span class="keyword">return</span> <span class="string">''</span></div></pre></td></tr></table></figure>
+<p>绑定了域名后，微信服务器就会将用户上传的消息直接post到你设定的URL上，在服务端接受判断实现功能就可以了。</p>
+<p>首先来看如何设置菜单按钮的设置：<a href="http://mp.weixin.qq.com/wiki/10/0234e39a2025342c17a7d23595c6b40a.html" target="_blank" rel="external">官网说明</a><br>也就是说</p>
+<ul>
+<li>首先根据公众测试号的<code>appID</code>和<code>appsecret</code>获取独属于这个账号的<code>accesstoken</code>，（<code>accesstoken</code>会在两小时后过期，且一天里有固定的调用次数，最好的做法是存储到数据库中当过期后刷新，不过本demo只需要在设置菜单时用到<code>accesstoken</code>，因此只需在需要的时候获取即可）</li>
+<li>然后用该<code>accesstoken</code>与”<a href="https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s&quot;结合得到一个url，再将含有菜单按钮设置的数据用json格式编码一同放进响应里回复即可" target="_blank" rel="external">https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s&quot;结合得到一个url，再将含有菜单按钮设置的数据用json格式编码一同放进响应里回复即可</a></li>
+</ul>
+<h3 id="菜单代码如下："><a href="#菜单代码如下：" class="headerlink" title="菜单代码如下："></a>菜单代码如下：</h3><figure class="highlight python"><table><tr><td class="code"><pre><div class="line"></div><div class="line"><span class="comment"># 获取微信token</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_token</span><span class="params">()</span>:</span></div><div class="line">    tokenUrl = <span class="string">'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&amp;appid='</span> + wxConfig.appID + <span class="string">'&amp;secret='</span> + wxConfig.appsecret;</div><div class="line">    result = urllib2.urlopen(tokenUrl).read()</div><div class="line">    <span class="keyword">return</span> result</div><div class="line"></div><div class="line"><span class="comment"># 微信菜单设置</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">set_menu</span><span class="params">(request, access_token)</span>:</span></div><div class="line">    url = <span class="string">"https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s"</span> % access_token</div><div class="line">    data = &#123;</div><div class="line">        <span class="string">"button"</span>: [</div><div class="line">            &#123;</div><div class="line">                <span class="string">"type"</span>: <span class="string">"view"</span>,</div><div class="line">                <span class="string">"name"</span>: <span class="string">"WebDemo"</span>,</div><div class="line">                <span class="string">"url"</span>: <span class="string">"http://np2016.summer007.com/"</span></div><div class="line">            &#125;,</div><div class="line">            &#123;</div><div class="line">                <span class="string">"type"</span>: <span class="string">"pic_photo_or_album"</span>,</div><div class="line">                <span class="string">"name"</span>: <span class="string">"上传图片"</span>,</div><div class="line">                <span class="string">"key"</span>: <span class="string">"photo"</span></div><div class="line">            &#125;,</div><div class="line">            &#123;</div><div class="line">                <span class="string">"type"</span>: <span class="string">"click"</span>,</div><div class="line">                <span class="string">"name"</span>: <span class="string">"预测"</span>,</div><div class="line">                <span class="string">"key"</span>:  <span class="string">"predict"</span></div><div class="line">            &#125;</div><div class="line">        ]</div><div class="line">    &#125;</div><div class="line">    req = urllib2.Request(url.encode(<span class="string">'utf-8'</span>))</div><div class="line">    req.add_header(<span class="string">'Content-Type'</span>, <span class="string">'application/json'</span>)</div><div class="line">    req.add_header(<span class="string">'encoding'</span>, <span class="string">'utf-8'</span>)</div><div class="line">    response = urllib2.urlopen(req, json.dumps(data, ensure_ascii=<span class="keyword">False</span>))</div><div class="line">    result = response.read()</div><div class="line">    <span class="keyword">return</span> result</div></pre></td></tr></table></figure>
+<p>设置好菜单后就是各种消息类型判断，以及对应的功能函数实现，这方面逻辑部分很简单，根据微信开发者文档中（<a href="http://mp.weixin.qq.com/wiki/17/f298879f8fb29ab98b2f2971d42552fd.html" target="_blank" rel="external">消息管理</a>）各个消息的类型及key做相应选择即可（代码写的有点乱，没有封装好，请大家凑合着看哈）：</p>
+<h3 id="判断选择代码："><a href="#判断选择代码：" class="headerlink" title="判断选择代码："></a>判断选择代码：</h3><figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="comment"># 设置微信菜单，成功会在页面返回&#123;"errcode":0,"errmsg":"ok"&#125;</span></div><div class="line"><span class="meta">@app.route('/setmenu', methods = ['GET', 'POST'])</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">setmenu</span><span class="params">()</span>:</span></div><div class="line">    token_data = wx.get_token()</div><div class="line">    access_token = json.loads(token_data).get(<span class="string">'access_token'</span>)</div><div class="line">    set_status = wx.set_menu(request, access_token)</div><div class="line">    <span class="keyword">return</span> set_status</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 微信主程序</span></div><div class="line"><span class="comment"># 目前存在三个缺陷：</span></div><div class="line"><span class="comment"># 一、微信服务器是五秒内不回复，断开尝试新连接，尝试三次后关闭</span></div><div class="line"><span class="comment"># 而程序响应时间（OCR）太长，所以没法做回复。return的response拒收</span></div><div class="line"><span class="comment"># 二、没来得及作报告生成模块和修改模块。</span></div><div class="line"><span class="comment"># 想法是：可以将web端模块封装起来，共用。</span></div><div class="line"><span class="comment"># 三、目前识别精度低，不知是哪一步转码降低了精度，</span></div><div class="line"><span class="comment"># 图片切割清晰度尚可，准确度也还行</span></div><div class="line"><span class="meta">@app.route('/weixin', methods=['GET','POST'])</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">weixin</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">global</span> wx_sex, wx_age, wx_imgId</div><div class="line">    data2 = []</div><div class="line">    <span class="comment"># 回应公众号域名绑定</span></div><div class="line">    <span class="keyword">if</span> request.method == <span class="string">'GET'</span>:</div><div class="line">        echostr = wx.check_weixin(request)</div><div class="line">        <span class="keyword">return</span> make_response(echostr)</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        rec = request.stream.read()</div><div class="line">        xml_rec = ET.fromstring(rec)</div><div class="line">        MsgType = xml_rec.find(<span class="string">'MsgType'</span>).text</div><div class="line">        <span class="comment"># 用户发文本就简单原文回复</span></div><div class="line">        <span class="keyword">if</span> MsgType == <span class="string">'text'</span>:</div><div class="line">            response = wx.text_type(xml_rec)</div><div class="line">            <span class="keyword">return</span> response</div><div class="line">        <span class="comment"># 用户发送图片消息，则进行处理，目前还没找到办法回应</span></div><div class="line">        <span class="keyword">elif</span> MsgType == <span class="string">'image'</span> <span class="keyword">and</span> xml_rec.find(<span class="string">'MsgId'</span>).text != wx_imgId:</div><div class="line">            wx_imgId = xml_rec.find(<span class="string">'MsgId'</span>).text</div><div class="line">            <span class="comment"># 从微信服务器发来的xml的PicUrl打开图片</span></div><div class="line">            image = wx.image_type(xml_rec)</div><div class="line">            img = cv2.imdecode(numpy.fromstring(image.read(), numpy.uint8), cv2.CV_LOAD_IMAGE_UNCHANGED)</div><div class="line">            report_data = json.loads(ImageFilter(image=img).ocr(<span class="number">22</span>))</div><div class="line">            <span class="keyword">if</span> report_data == <span class="keyword">None</span>:</div><div class="line">                response = wx.text_response(xml_rec, <span class="string">"image is not a report!"</span>)</div><div class="line">                <span class="keyword">return</span> response</div><div class="line">            <span class="keyword">for</span> item <span class="keyword">in</span> report_data[<span class="string">'bloodtest'</span>]:</div><div class="line">                <span class="keyword">if</span> item[<span class="string">'value'</span>] == <span class="number">0</span>:</div><div class="line">                    data2.append(<span class="number">0</span>)</div><div class="line">                <span class="keyword">else</span>:</div><div class="line">                    data2.append(float(item[<span class="string">'value'</span>]))</div><div class="line">            arr = numpy.array(data2)</div><div class="line">            arr = numpy.reshape(arr, [<span class="number">1</span>, <span class="number">22</span>])</div><div class="line">            sex, age = tf_predict.predict(arr)</div><div class="line">            wx_age = int(age)</div><div class="line">            <span class="keyword">if</span> sex == <span class="number">1</span>:</div><div class="line">                wx_sex = <span class="string">"男"</span></div><div class="line">            <span class="keyword">else</span>:</div><div class="line">                wx_sex = <span class="string">"女"</span></div><div class="line">        <span class="comment"># predict功能，返回上传图片后生成的报告结果</span></div><div class="line">        <span class="keyword">elif</span> MsgType == <span class="string">'event'</span>:</div><div class="line">            Event = xml_rec.find(<span class="string">'Event'</span>).text</div><div class="line">            <span class="keyword">if</span> xml_rec.find(<span class="string">'EventKey'</span>) <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</div><div class="line">                EventKey = xml_rec.find(<span class="string">'EventKey'</span>).text</div><div class="line">                <span class="keyword">if</span> Event == <span class="string">'CLICK'</span> <span class="keyword">and</span> EventKey == <span class="string">"predict"</span> <span class="keyword">and</span> wx_sex != <span class="string">''</span>:</div><div class="line">                    predict_text = <span class="string">"sex is :"</span> + wx_sex + <span class="string">"\n"</span> + <span class="string">"age is :"</span> + str(wx_age)</div><div class="line">                    response = wx.text_response(xml_rec, predict_text)</div><div class="line">                    wx_sex = <span class="string">""</span></div><div class="line">                    wx_age = <span class="number">0</span></div><div class="line">                    <span class="keyword">return</span> response</div><div class="line">                <span class="keyword">else</span>:</div><div class="line">                    response = wx.text_response(xml_rec, <span class="string">"请先上传图片！"</span>)</div><div class="line">                    <span class="keyword">return</span> response</div><div class="line">    <span class="keyword">return</span> <span class="string">''</span></div></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>微信公众号的开发，python和js在逻辑上相差无几，主要注意一下几点：</p>
+<ol>
+<li>语法问题</li>
+<li>数据格式转换（重点，json.dumps()函数的中文格式转换需要注意，设置ensure_ascii=False）</li>
+<li>与微信交互的格式,主要有两种：json,xml。<br>以上是博主的一些浅薄的经验，如有错，请不吝赐教。</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/28/BloodTestOCRDemo/" rel="next" title="BloodTestOCR搭建服务器避坑指南">
+                <i class="fa fa-chevron-left"></i> BloodTestOCR搭建服务器避坑指南
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/01/05/BloodTestOCRCaffe/" rel="prev" title="BloodTestOCRCaffe">
+                BloodTestOCRCaffe <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/01/05/BloodTestOCRWeixin/"
+           data-title="BloodTestOCR微信端简单功能实现经验谈" data-url="http://github.summer007.com/2017/01/05/BloodTestOCRWeixin/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Summer007" />
+          <p class="site-author-name" itemprop="name">Summer007</p>
+          <p class="site-description motion-element" itemprop="description">Welcom to my Dream World</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/XiaTian007/XiaTian007.github.io" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/3212443154" target="_blank" title="weibo">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/xia-tian-11-47" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-global"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#微信端搭建"><span class="nav-number">1.</span> <span class="nav-text">微信端搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#功能说明"><span class="nav-number">1.1.</span> <span class="nav-text">功能说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件说明"><span class="nav-number">1.2.</span> <span class="nav-text">文件说明</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#wxConfig-py"><span class="nav-number">1.2.1.</span> <span class="nav-text">wxConfig.py</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#wx-py"><span class="nav-number">1.2.2.</span> <span class="nav-text">wx.py</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#config-ini"><span class="nav-number">1.2.3.</span> <span class="nav-text">config.ini</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#view-py"><span class="nav-number">1.2.4.</span> <span class="nav-text">view.py</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码注解"><span class="nav-number">2.</span> <span class="nav-text">代码注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#绑定代码如下："><span class="nav-number">2.1.</span> <span class="nav-text">绑定代码如下：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#菜单代码如下："><span class="nav-number">2.2.</span> <span class="nav-text">菜单代码如下：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#判断选择代码："><span class="nav-number">2.3.</span> <span class="nav-text">判断选择代码：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Summer007</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"summer007"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js?v=5.1.0"></script>
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
