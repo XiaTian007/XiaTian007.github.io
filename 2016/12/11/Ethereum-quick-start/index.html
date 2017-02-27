@@ -381,13 +381,13 @@ sudo apt-get install ethereum
 <ul>
 <li>install latest nodejs </li>
 </ul>
-<figure class="highlight vim"><table><tr><td class="code"><pre><div class="line"></div><div class="line">curl -sL http<span class="variable">s:</span>//<span class="keyword">deb</span>.nodesource.<span class="keyword">com</span>/setup_6.<span class="keyword">x</span> | sudo -E bash -</div><div class="line">sudo apt-<span class="built_in">get</span> install -<span class="keyword">y</span> nodejs</div></pre></td></tr></table></figure>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">curl -sL http<span class="variable">s:</span>//<span class="keyword">deb</span>.nodesource.<span class="keyword">com</span>/setup_6.<span class="keyword">x</span> | sudo -E bash -</div><div class="line">sudo apt-<span class="built_in">get</span> install -<span class="keyword">y</span> nodejs</div></pre></td></tr></table></figure>
 <ul>
 <li>install solc <code>npm install solc</code></li>
 <li>install the <a href="npm%20install%20-g%20ethereumjs-testrpc">testrpc</a>  by <code>npm install -g ethereumjs-testrpc</code></li>
 <li>install the Truffle by <code>npm install -g truffle</code> (the -g may require sudo). To verify it installed, type <code>truffle list</code> in a console window to list all truffle commands.</li>
 </ul>
-<h2 id="Conference-demo"><a href="#Conference-demo" class="headerlink" title="Conference-demo"></a>Conference-demo</h2><figure class="highlight dos"><table><tr><td class="code"><pre><div class="line"><span class="built_in">mkdir</span> conference</div><div class="line"><span class="built_in">cd</span> conference</div><div class="line">truffle init</div></pre></td></tr></table></figure>
+<h2 id="Conference-demo"><a href="#Conference-demo" class="headerlink" title="Conference-demo"></a>Conference-demo</h2><figure class="highlight dos"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">mkdir</span> conference</div><div class="line"><span class="built_in">cd</span> conference</div><div class="line">truffle init</div></pre></td></tr></table></figure>
 <p>This will create this directory structure:</p>
 <p><img src="http://oiwadb81v.bkt.clouddn.com/image/Ethereum/1481371132123.png" alt="Alt text"></p>
 <p>Now ,start a new node in a new terminal by running <code>testrpc</code> and you’ll see </p>
