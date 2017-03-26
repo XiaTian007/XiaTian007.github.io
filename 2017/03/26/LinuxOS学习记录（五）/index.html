@@ -84,16 +84,28 @@
 
 
 
-<meta name="description" content="Welcom to my Dream World">
+<meta name="description" content="分析system_call中断处理过程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="LinuxOS学习记录（五）">
 <meta property="og:url" content="http://github.summer007.com/2017/03/26/LinuxOS学习记录（五）/index.html">
 <meta property="og:site_name" content="Dream World">
-<meta property="og:description" content="Welcom to my Dream World">
-<meta property="og:updated_time" content="2017-03-26T04:47:35.321Z">
+<meta property="og:description" content="分析system_call中断处理过程">
+<meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/VPBZ8AD%29K6EBK%7B%25HG@_CMRA.png">
+<meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/HYA%5D7B%60%5BO~5E9%7BVI7Y%602$CD.png">
+<meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/2017-03-26_150735.jpg">
+<meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/2017-03-26_150956.jpg">
+<meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/V%5DU%7BX644RD%5BH6%5BI6@303$SL.png">
+<meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson5745167-20160324094808245-680741010.jpg">
+<meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson5745167-20160324094836901-1504699530.jpg">
+<meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson5745167-20160324094907183-1890599880.jpg">
+<meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson5745167-20160324094937042-541826164.jpg">
+<meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson5745167-20160324095027214-1000490314.jpg">
+<meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson5system_call%E6%B5%81%E7%A8%8B%E5%9B%BE.bmp">
+<meta property="og:updated_time" content="2017-03-26T13:12:30.294Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LinuxOS学习记录（五）">
-<meta name="twitter:description" content="Welcom to my Dream World">
+<meta name="twitter:description" content="分析system_call中断处理过程">
+<meta name="twitter:image" content="http://oiwadb81v.bkt.clouddn.com/VPBZ8AD%29K6EBK%7B%25HG@_CMRA.png">
 
 
 
@@ -309,7 +321,7 @@
                 <i class="fa fa-calendar-check-o"></i>
               </span>
               <span class="post-meta-item-text">更新于</span>
-              <time title="更新于" itemprop="dateModified" datetime="2017-03-26T12:47:35+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2017-03-26T21:12:30+08:00">
                 2017-03-26
               </time>
             
@@ -336,6 +348,10 @@
           
 
           
+              <div class="post-description">
+                  分析system_call中断处理过程
+              </div>
+          
 
         </div>
       </header>
@@ -348,7 +364,59 @@
       
 
       
-        
+        <blockquote>
+<p>夏天 原创作品转载请注明出处 《Linux内核分析》MOOC课程 <a href="http://mooc.study.163.com/course/USTC-1000029000" target="_blank" rel="external">http://mooc.study.163.com/course/USTC-1000029000</a></p>
+</blockquote>
+<p>本周学习接上周实验，<a href="http://www.github.summer007.com/2017/03/19/LinuxOS%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%EF%BC%88%E5%9B%9B%EF%BC%89/" title="LinuxOS学习记录（四）" target="_blank" rel="external">LinuxOS学习记录（四）</a></p>
+<h2 id="一、整合Write函数"><a href="#一、整合Write函数" class="headerlink" title="一、整合Write函数"></a>一、整合Write函数</h2><p>这次将之前编写的两个函数，<code>Write()</code>以及<code>WriteAsm()</code>整合到我们的MenuOS中，此时，我们需要做的步骤如下：</p>
+<ul>
+<li>更新<code>menu</code>代码到最新版（如果是在自己本地环境上搭建的menuos，则跳过此步）</li>
+<li>在<code>test.c</code>文件中<code>main（）</code> 函数里增加MenuConfig</li>
+</ul>
+<p><img src="http://oiwadb81v.bkt.clouddn.com/VPBZ8AD%29K6EBK%7B%25HG@_CMRA.png" alt=""></p>
+<ul>
+<li>增加对应的系统调用函数，本例中为<code>Write()</code>以及<code>WriteAsm()</code></li>
+</ul>
+<p><img src="http://oiwadb81v.bkt.clouddn.com/HYA%5D7B%60%5BO~5E9%7BVI7Y%602$CD.png" alt="在test.c文件中添加函数"></p>
+<ul>
+<li>调用已经编写好的脚本（<code>Makefile</code>）执行命令： <code>make rootfs</code></li>
+</ul>
+<p><img src="http://oiwadb81v.bkt.clouddn.com/2017-03-26_150735.jpg" alt=""></p>
+<ul>
+<li>运行MenuOS，此时可以发现已经集成到程序里的<code>write</code>和<code>write-asm</code>命令</li>
+</ul>
+<p><img src="http://oiwadb81v.bkt.clouddn.com/2017-03-26_150956.jpg" alt=""></p>
+<h2 id="二、使用gdb跟踪内核"><a href="#二、使用gdb跟踪内核" class="headerlink" title="二、使用gdb跟踪内核"></a>二、使用gdb跟踪内核</h2><ul>
+<li>gdb命令：</li>
+</ul>
+<figure class="highlight excel"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">qemu -kernel linux-<span class="number">3.18</span>.<span class="number">6</span>/arch/<span class="symbol">x86</span>/boot/bzImage -initrd rootfs.img -s -S</div><div class="line">gdb</div><div class="line">（gdb）file linux-<span class="number">3.18</span>.<span class="number">6</span>/vmlinux</div><div class="line">（gdb）target remo<span class="symbol">te:1234</span></div><div class="line">b sys_time：在系统调用<span class="built_in">time</span>的位置设置断点</div><div class="line">c：在MenuOs里使用<span class="built_in">time</span>，停在断点处</div><div class="line">s 单步调试—一步一步执行（PS：无法执行time_asm中的<span class="built_in">int</span> <span class="number">0</span>X80部分）</div><div class="line"><span class="built_in">n</span> 单步调试-不会进入函数内部，而是直接进入下一条语句</div></pre></td></tr></table></figure>
+<p>这里我们用<code>b sys_write</code>设置断点<br><img src="http://oiwadb81v.bkt.clouddn.com/V%5DU%7BX644RD%5BH6%5BI6@303$SL.png" alt=""><br>可以发现，系统启动过程中有很多次系统调用，输出启动信息。</p>
+<h2 id="三、分析system-call代码的具体调用过程"><a href="#三、分析system-call代码的具体调用过程" class="headerlink" title="三、分析system_call代码的具体调用过程"></a>三、分析system_call代码的具体调用过程</h2><p>接下来分析system_call代码的具体调用过程（代码在kernel/entry_32.S中）</p>
+<p> <img src="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson5745167-20160324094808245-680741010.jpg" alt=""><br><img src="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson5745167-20160324094836901-1504699530.jpg" alt=""></p>
+<p>简化代码如下：</p>
+<p> <img src="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson5745167-20160324094907183-1890599880.jpg" alt=""></p>
+<p>代码中先定义了两个宏（SAVE_ALL、RESTORE_ALL）</p>
+<p> <img src="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson5745167-20160324094937042-541826164.jpg" alt=""></p>
+<p>16行是调用此系统调用所对应的函数（在122号函数uname中调用的就是sys_newuname）；</p>
+<p>17行保存返回值；</p>
+<p>在18行exit的时候，会检测当前的任务是不是需要处理；</p>
+<p>如果不需要处理，就跳转到21行restore_all；</p>
+<p>然后执行23行return，系统调用就结束了。</p>
+<p>*但是一般情况下都会有需要处理的任务，此时就会进入到26行处syscall_exit_work</p>
+<p><img src="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson5745167-20160324095027214-1000490314.jpg" alt=""></p>
+<ul>
+<li><p>然后跳转到30行work_pending，32行处理信号；</p>
+</li>
+<li><p>如果需要重新调度，就会执行到33行work_resched，先进行调度call_schedule，然后再跳转到restore_all，返回系统调用。</p>
+</li>
+</ul>
+<p>从system_call开始到iret结束之间的整个过程，可以用流程图表示如下：</p>
+<p><img src="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson5system_call%E6%B5%81%E7%A8%8B%E5%9B%BE.bmp" alt=""></p>
+<h2 id="四、总结理解"><a href="#四、总结理解" class="headerlink" title="四、总结理解"></a>四、总结理解</h2><p>在系统调用返回之前，可能会发生进程调度（call_schedule），其中可能还会发生中断上下文的切换和进程上下文的切换；</p>
+<p>在当前进程的时候，有些信号可能需要处理；</p>
+<p>使用gdb可以方便的跟踪内核执行进度，但对于汇编代码部分则不方便跟踪；</p>
+<p>内核可以抽象成是很多种不同的中断处理过程的集合。</p>
+
       
     </div>
 
@@ -460,8 +528,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -543,6 +620,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、整合Write函数"><span class="nav-number">1.</span> <span class="nav-text">一、整合Write函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、使用gdb跟踪内核"><span class="nav-number">2.</span> <span class="nav-text">二、使用gdb跟踪内核</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、分析system-call代码的具体调用过程"><span class="nav-number">3.</span> <span class="nav-text">三、分析system_call代码的具体调用过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、总结理解"><span class="nav-number">4.</span> <span class="nav-text">四、总结理解</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
     </div>
