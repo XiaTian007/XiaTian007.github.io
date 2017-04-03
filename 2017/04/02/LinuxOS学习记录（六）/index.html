@@ -102,7 +102,7 @@
 <meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/20150411195838890.png">
 <meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/20150411200437114.png">
 <meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/20150411201720061.png">
-<meta property="og:updated_time" content="2017-04-03T03:35:01.676Z">
+<meta property="og:updated_time" content="2017-04-03T03:37:12.034Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LinuxOS学习记录（六）">
 <meta name="twitter:description" content="Linux中的进程简析！">
@@ -322,7 +322,7 @@
                 <i class="fa fa-calendar-check-o"></i>
               </span>
               <span class="post-meta-item-text">更新于</span>
-              <time title="更新于" itemprop="dateModified" datetime="2017-04-03T11:35:01+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2017-04-03T11:37:12+08:00">
                 2017-04-03
               </time>
             
@@ -412,6 +412,9 @@
 <p>三、总结<br>可以看出，fork()中，内核并不立刻为新进程分配代码和数据物理内存页，新进程与父进程共同使用父进程已有的代码和数据物理内存页面。只有当以后执行过程中由一个进程一写方式访问内存时候被访问的内存页面才会在写操作之前被复制到新申请的内存页面中。另外在fork的最后是将任务设置成了就绪状态，由于fork（）是一个系统调用，在系统调用部分system_call.s，可以看到在系统函数返回后，会调用调度函数schedule（），在schedule()中，就会检测到新进程的就绪状态，并用switch_to()切换到新进程进行执行。</p>
 <p>具体过程是：首先在内存中申请一页内存存放进程控制块task_struct，并返回进程号nr，并在task数组的nr处存放task_struct的指针，还要将task的当前指针current指到nr处；然后将父进程的task_struct的内容复制到新进程的task_struct中作为模版；之后我们对task_struct中的信息进行修改，主要进行一下工作：设置父进程、清除信号位图、时间片、运行时间、根据当前环境设置tss（内核态指针esp0指向task_struct所在页的顶端）、设置LDT的选择子等(根据nr指向GDT中相应的ldt描述符)。 在之后我们要设置新进程的代码段、数据段的基地址和段长：更新task_struct中的代码开始地址：更新task_struct中局部描述符表中的代码段和数据段描述符。然后再复制父进程的页表目录项和页表：在页目录表中，复制父进程的页表目录项，目的地址由新进程的线性地址计算出来；对每个对应的页表目录项申请一个空闲页，并用页表地址更新页表目录项，最后将父进程页表中各项复制到新进程对应的页表中，也就是说，这个时候，子进程与父进程共享物理内存。并且更新task_struct中的文件信息：文件打开次数加1，父进程的当前目录引用数加1。还要设置TSS和LDT描述符项：在全局描述符表（GDT）中设置新任务的TSS描述符项和LDT段的描述符项，使TSS描述符项和LDT描述符项分别指向task_struct的TSS结构和LDT结构。最后我们将任务设置为就绪状态，向当前进程（父进程）返回新进程号。</p>
 <p>最后总结一下，Linux进程的创建过程就是内存中进程相关资源产生的过程，就是clone的过程。例如task _struct、内核态堆栈、线型地址到物理地址的映射表、全局描述表（GDT）中的任务状态段，局部描述符表、代码段、堆、栈、参数全局变量等数据区什么的。上面提到的这几类资源中，很多都与task_struct有关，所以我想说一下task_struct。它是Linux的进程控制块，驻留在内存中，描述进程的基本信息，所以它是进程操作依据的重要数据结构。Linux中一般进程都是由现有的一个进程创建的，也就是我们所说的父进程，子进程。具体的创建是通过fork()实现的。</p>
+<blockquote>
+<p>本文摘自博客 <a href="http://lib.csdn.net/article/linux/44777" target="_blank" rel="external">http://lib.csdn.net/article/linux/44777</a></p>
+</blockquote>
 
       
     </div>
