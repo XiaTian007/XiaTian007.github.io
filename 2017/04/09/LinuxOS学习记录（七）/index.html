@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Linux,OS," />
 
 
 
@@ -84,16 +84,25 @@
 
 
 
-<meta name="description" content="Welcom to my Dream World">
+<meta name="description" content="Linux中可执行程序的装载！">
 <meta property="og:type" content="article">
 <meta property="og:title" content="LinuxOS学习记录（七）">
 <meta property="og:url" content="http://github.summer007.com/2017/04/09/LinuxOS学习记录（七）/index.html">
 <meta property="og:site_name" content="Dream World">
-<meta property="og:description" content="Welcom to my Dream World">
-<meta property="og:updated_time" content="2017-04-09T10:11:50.011Z">
+<meta property="og:description" content="Linux中可执行程序的装载！">
+<meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson7210755465931981.png">
+<meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson7210811475785294.png">
+<meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson7210811475785294.png">
+<meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson710820-a4a38caa70cb2478.png">
+<meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson72017-04-10_104300.jpg">
+<meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson72017-04-10_105335.jpg">
+<meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson72017-04-10_104354.jpg">
+<meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/2017-04-10_110019.jpg">
+<meta property="og:updated_time" content="2017-04-10T03:10:40.445Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LinuxOS学习记录（七）">
-<meta name="twitter:description" content="Welcom to my Dream World">
+<meta name="twitter:description" content="Linux中可执行程序的装载！">
+<meta name="twitter:image" content="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson7210755465931981.png">
 
 
 
@@ -309,8 +318,8 @@
                 <i class="fa fa-calendar-check-o"></i>
               </span>
               <span class="post-meta-item-text">更新于</span>
-              <time title="更新于" itemprop="dateModified" datetime="2017-04-09T18:11:50+08:00">
-                2017-04-09
+              <time title="更新于" itemprop="dateModified" datetime="2017-04-10T11:10:40+08:00">
+                2017-04-10
               </time>
             
           </span>
@@ -336,6 +345,10 @@
           
 
           
+              <div class="post-description">
+                  Linux中可执行程序的装载！
+              </div>
+          
 
         </div>
       </header>
@@ -348,7 +361,95 @@
       
 
       
-        
+        <blockquote>
+<p>夏天 原创作品转载请注明出处 《Linux内核分析》MOOC课程 <a href="http://mooc.study.163.com/course/USTC-1000029000" target="_blank" rel="external">http://mooc.study.163.com/course/USTC-1000029000</a></p>
+</blockquote>
+<h2 id="一、可执行程序的创建－－预处理、编译和链接"><a href="#一、可执行程序的创建－－预处理、编译和链接" class="headerlink" title="一、可执行程序的创建－－预处理、编译和链接"></a>一、可执行程序的创建－－预处理、编译和链接</h2><h3 id="预处理"><a href="#预处理" class="headerlink" title="预处理"></a>预处理</h3><p>预处理过程读入源代码，检查包含预处理指令的语句和宏定义，并对源代码进行相应的转换，预处理过程还会删除程序中的注释和多余的空白字符。其中预处理指令主要包括以下四个方面：</p>
+<ul>
+<li>宏定义指令——预处理过程会把源代码中出现的宏标识符替换成宏定义时的值，常用的两种宏定义：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//声明一个标识符，全部用大写字母来定义宏</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_NUM 10</span></div><div class="line"></div><div class="line"><span class="comment">//带参数的#define指令（宏函数）</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> Cube(x)  ((x)*(x))</span></div><div class="line"><span class="keyword">int</span> i,num=<span class="number">1</span>;</div><div class="line">i=Cube(num);</div></pre></td></tr></table></figure>
+<ul>
+<li><p>条件编译指令——定义不同的宏来决定编译程序对哪些代码进行处理，条件编译指令将决定哪些代码被编译，而哪些是不被编译的。</p>
+</li>
+<li><p>头文件包含指令——<code>#include</code>预处理指令的作用是在指令处展开被包含的文件。程序中包含头文件有两种格式：<code>#include &lt;my.h&gt;</code>和<code>#include &quot;my.h&quot;</code></p>
+</li>
+<li><p>特殊符号——预编译程序可以识别一些特殊的符号。预编译程序对于在源程序中出现的这些串将用合适的值进行替换，<code>__FILE__</code>，<code>__LINE__</code>，<code>__TIME__</code> 等。</p>
+</li>
+</ul>
+<blockquote>
+<p>上述阶段对应 <code>gcc -E -o hello.cpp hello.c -m32</code></p>
+</blockquote>
+<h3 id="编译阶段"><a href="#编译阶段" class="headerlink" title="编译阶段"></a>编译阶段</h3><p>在这个阶段中，Gcc首先要检查代码的规范性、是否有语法错误等，以确定代码的实际要做的工作，在检查无误后，Gcc把代码翻译成汇编语言。</p>
+<blockquote>
+<p>对应 <code>gcc -x cpp-output -S -o hello.s hello.cpp -m32</code></p>
+</blockquote>
+<h3 id="汇编阶段"><a href="#汇编阶段" class="headerlink" title="汇编阶段"></a>汇编阶段</h3><p>　　把编译阶段生成的”.s”文件转成目标文件，得到一个二进制文件。</p>
+<blockquote>
+<p>对应 <code>gcc -x assembler -c hello.s -o hello.o -m32</code></p>
+</blockquote>
+<h3 id="链接阶段"><a href="#链接阶段" class="headerlink" title="链接阶段"></a>链接阶段</h3><p>　　函数库一般分为静态库和动态库两种。静态库是指编译链接时，把库文件的代码全部加入到可执行文件中，因此生成的文件比较大，但在运行时也就不再需要库文件了。动态库在编译链接时并没有把库文件的代码加入到可执行文件中，而是在程序执行时由运行时链接文件加载库。动态库一般后缀名为<code>.so</code>，Gcc在编译时默认使用动态库。</p>
+<p>　　<code>gcc -o hello hello.o -m32 （动态编译）</code></p>
+<p>　　<code>gcc -o hello.static hello.o -m32 -static（静态编译）</code></p>
+<h3 id="ELF可执行文件"><a href="#ELF可执行文件" class="headerlink" title="ELF可执行文件"></a>ELF可执行文件</h3><ul>
+<li><p>目标文件有三类：</p>
+<ul>
+<li><p>可重定位文件——文件保存着代码和适当的数据，用来和其他的object文件一起来创建一个可执行文件或者是一个共享文件。</p>
+</li>
+<li><p>可执行文件：一个可执行(executable)文件保存着一个用来执行的程序；该文件指出了exec(BA_OS)如何来创建程序进程映象。</p>
+</li>
+<li><p>共享object文件：一个共享object文件保存着代码和合适的数据，用来被两个链接器链接，分别是连接编辑器[ld(SD_CMD)]和动态链接器。</p>
+</li>
+</ul>
+</li>
+<li><p>ELF文件格式</p>
+</li>
+</ul>
+<p>　　用<code>readelf -h hello</code>看看elf文件内容。</p>
+<p><img src="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson7210755465931981.png" alt=""></p>
+<p>ELF文件头</p>
+<p><img src="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson7210811475785294.png" alt=""></p>
+<p>ELF文件默认从0x8048000开始加载，上图的ELF头中Entry point address的内容为程序实际入口，当启动一个刚加载过可执行文件的进程时，就从此处执行。</p>
+<h2 id="二、可执行程序、共享库和动态链接"><a href="#二、可执行程序、共享库和动态链接" class="headerlink" title="二、可执行程序、共享库和动态链接"></a>二、可执行程序、共享库和动态链接</h2><p>Shell本身不限制命令行参数的个数，命令行参数的个数受限于命令自身。例如，<code>int main(int argc, char *argv[])</code>；又如， <code>int main(int argc, char *argv[], char *envp[])</code>。</p>
+<p>Shell会调用<code>execve</code>将命令行参数和环境参数传递给可执行程序的<code>main</code>函数，<code>int execve(const char * filename,char * const argv[ ],char * const envp[ ])</code>，库函数<code>exec*</code>都是<code>execve</code>的封装例程。</p>
+<p><img src="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson7210811475785294.png" alt=""> </p>
+<p>动态链接分为可执行程序装载时动态链接和运行时动态链接。装载时动态链接是在将功能模块读入内存时把动态库中调用到的相关模块的内容载入内存。运行时动态链接是在执行程序调用到模块内容时再将动态库中的相应模块载入到内存。</p>
+<h2 id="三、可执行程序的装载"><a href="#三、可执行程序的装载" class="headerlink" title="三、可执行程序的装载"></a>三、可执行程序的装载</h2><h3 id="在linux中一个程序是如何加载运行的"><a href="#在linux中一个程序是如何加载运行的" class="headerlink" title="在linux中一个程序是如何加载运行的"></a>在linux中一个程序是如何加载运行的</h3><p>在shell中输入一个程序的名称时，shell会先fork一个子进程，然后在子进程中调用<code>execlp</code>函数来启动我们执行的程序。那么又是如何从当前进程程序转换到我我们的可执行程序呢？这都是<code>exec</code>系统调用的功劳。</p>
+<h4 id="exec系统调用"><a href="#exec系统调用" class="headerlink" title="exec系统调用"></a>exec系统调用</h4><p>首先，exec会调用<code>sys_execve</code>，然后调用<code>do_execve</code>,再调用<code>do_execve_common</code>,这个函数会把函数参数和系统环境传进来进行相应的处理。然后调用<code>exec_binprm</code>来执行相应的程序。而<code>exec_binprm</code>又会调用<code>search_binary_handler</code>,这个函数会调用各种不同的格式来识别相应的文件，直到识别为止，比如<code>linux</code>中可执行文件为<code>ELF</code>，它就会识别成elf文件，会调用<code>load_elf_binary</code>,其内部是和ELF文件格式解析的部分需要和ELF文件格式标准结合起来阅读。<br>此处为观察者模式的被观察者。</p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">1369 </span>   list_for_each_entry(fmt, &amp;formats, lh) &#123;</div><div class="line"><span class="symbol">1370 </span>       <span class="keyword">if</span> (!try_module_get(fmt-&gt;module))</div><div class="line"><span class="symbol">1371 </span>           continue;</div><div class="line"><span class="symbol">1372 </span>       read_unlock(&amp;binfmt_lock);</div><div class="line"><span class="symbol">1373 </span>       bprm-&gt;recursion_depth++;</div><div class="line"><span class="symbol">1374 </span>       retval = fmt-&gt;load_binary(bprm);</div><div class="line"><span class="symbol">1375 </span>       read_lock(&amp;binfmt_lock);</div></pre></td></tr></table></figure>
+<p>此处为观察者模式中的观察者<br><figure class="highlight basic"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="number">82</span>static struct linux_binfmt elf_format = &#123;</div><div class="line"><span class="symbol">83 </span> .module     = THIS_MODULE,</div><div class="line"><span class="symbol">84 </span> .load_binary    = load_elf_binary,</div><div class="line"><span class="symbol">85 </span> .load_shlib = load_elf_library,</div><div class="line"><span class="symbol">86 </span> .core_dump  = elf_core_dump,</div><div class="line"><span class="symbol">87 </span> .min_coredump   = ELF_EXEC_PAGESIZE,</div><div class="line"><span class="number">88</span>&#125;;</div><div class="line"><span class="number">2198</span>static <span class="keyword">int</span> __init init_elf_binfmt(void)</div><div class="line"><span class="number">2199</span>&#123;</div><div class="line"><span class="symbol">2200 </span>   register_binfmt(&amp;elf_format);</div><div class="line"><span class="symbol">2201 </span>   <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line"><span class="number">2202</span>&#125;</div></pre></td></tr></table></figure></p>
+<p>在<code>sys_execve</code>处设置断点</p>
+<p><img src="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson710820-a4a38caa70cb2478.png" alt=""></p>
+<h4 id="load-elf-binary"><a href="#load-elf-binary" class="headerlink" title="load_elf_binary"></a>load_elf_binary</h4><p><code>retval = fmt-&gt;load_binary(bprm)</code>把对应的文件以对应的格式加载到内存里面。由于Linux是elf格式，故会执行对应的<code>load_elf_binary</code><br><img src="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson72017-04-10_104300.jpg" alt=""></p>
+<p>需要动态链接的可执行文件先加载连接器ld</p>
+<p><img src="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson72017-04-10_105335.jpg" alt=""></p>
+<p>动态链接需要将CPU控制权交给ld来加载依赖库并完成动态链接</p>
+<p>然后在这个函数里面有一个函数<code>start_thread</code>，这个函数会复制内核堆栈，同时会设置新的进程的执行位置，即会设置新的<code>eip</code>，使<code>eip</code>指向新程序的入口位置。对于静态连接的文件，<code>elf_entry</code>是新程序执行的起点。</p>
+<p><img src="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson72017-04-10_104354.jpg" alt=""></p>
+<p><img src="http://oiwadb81v.bkt.clouddn.com/2017-04-10_110019.jpg" alt=""></p>
+<h2 id="四、实验部分"><a href="#四、实验部分" class="headerlink" title="四、实验部分"></a>四、实验部分</h2><h3 id="修改menu代码"><a href="#修改menu代码" class="headerlink" title="修改menu代码"></a>修改menu代码</h3><p>下载新版menu代码后执行<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mv test_exec<span class="selector-class">.c</span> test<span class="selector-class">.c</span></div><div class="line">make rootfs</div></pre></td></tr></table></figure></p>
+<p>可以看到menuOS里多出了两个命令：<br>exec和fork。本次试验主要测试exec，代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">Exec</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">int</span> pid;</div><div class="line">	<span class="comment">/* fork another process */</span></div><div class="line">	pid = fork();</div><div class="line">	<span class="keyword">if</span> (pid &lt; <span class="number">0</span>) </div><div class="line">	&#123; </div><div class="line">		<span class="comment">/* error occurred */</span></div><div class="line">		<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,<span class="string">"Fork Failed!"</span>);</div><div class="line">		<span class="built_in">exit</span>(<span class="number">-1</span>);</div><div class="line">	&#125; </div><div class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (pid == <span class="number">0</span>) </div><div class="line">	&#123;</div><div class="line">		<span class="comment">/*	 child process 	*/</span></div><div class="line">    	<span class="built_in">printf</span>(<span class="string">"This is Child Process!\n"</span>);</div><div class="line">		execlp(<span class="string">"/hello"</span>,<span class="string">"hello"</span>,<span class="literal">NULL</span>);</div><div class="line">	&#125; </div><div class="line">	<span class="keyword">else</span> </div><div class="line">	&#123; 	</div><div class="line">		<span class="comment">/* 	parent process	 */</span></div><div class="line">    	<span class="built_in">printf</span>(<span class="string">"This is Parent Process!\n"</span>);</div><div class="line">		<span class="comment">/* parent will wait for the child to complete*/</span></div><div class="line">		wait(<span class="literal">NULL</span>);</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"Child Complete!\n"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>现在用gdb跟踪sys_execve。</p>
+<h2 id="五、理解总结"><a href="#五、理解总结" class="headerlink" title="五、理解总结"></a>五、理解总结</h2><ol>
+<li><p>执行文件的创建包括预处理、编译、汇编、链接四个阶段。</p>
+</li>
+<li><p>学习并了解了ELF文件的格式，了解了ELF文件头、段头表、text节等各个组成部分。</p>
+</li>
+<li><p>通过对源码的追踪分析，理解了可执行程序加载的大致流程。当执行到execve系统调用时，陷入内核态，用execve加载的可执行文件覆盖当前进程的可执行程序，当execve系统调用返回时，返回新的可执行程序的执行起点。</p>
+</li>
+<li><p>如果是静态链接，<code>elf_entry</code>指向可执行文件规定的头部（main函数对应的位置0x8048<em>*</em>）如果需要依赖动态链接库，<code>elf_entry</code>指向动态链接器的起点。动态链接主要是由动态链接器ld来完成的。</p>
+</li>
+<li><p>可执行文件描述了如何初始化一个新的执行上下文，也就是如何开始一个新的计算。可执行文件类别有很多，在内核中有一个链表，在init的时候会将支持的可执行程序解析程序注册添加到链表中，那么在对可执行文件进行解析时，就从链表头开始找，找到匹配的处理函数就可以对其进行解析。 </p>
+</li>
+<li><p>在shell中启动一个可执行程序时，会创建一个新进程，它通过覆盖父进程（也就是shell进程）的进程环境，并将用户态堆栈清空，获得所需要的执行上下文环境。 </p>
+</li>
+<li><p>命令行参数和环境变量会通过shell传递给<code>execve</code>，<code>excve</code>通过系统调用参数传递，传递给<code>sys_execve</code>，最后<code>sys_execve</code>在初始化新进程堆栈的时候拷贝进去。 </p>
+</li>
+<li><p><code>load_elf_binary-&gt;start_thread(…)</code>通过修改内核堆栈中EIP的值作为新程序的起点。 如果新程序的动态链接的，那么就需要加载所需要的库函数，动态连接器ld会负责加载过程，动态链接库的装载过程类似于一个图的广度优先遍历过程，装载完成后，ld将CPU控制权交给可执行程序，继续执行可执行程序。</p>
+</li>
+</ol>
+
       
     </div>
 
@@ -368,6 +469,14 @@
 
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+            <a href="/tags/OS/" rel="tag"># OS</a>
+          
+        </div>
       
 
       
@@ -456,8 +565,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -539,6 +657,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、可执行程序的创建－－预处理、编译和链接"><span class="nav-number">1.</span> <span class="nav-text">一、可执行程序的创建－－预处理、编译和链接</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#预处理"><span class="nav-number">1.1.</span> <span class="nav-text">预处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译阶段"><span class="nav-number">1.2.</span> <span class="nav-text">编译阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#汇编阶段"><span class="nav-number">1.3.</span> <span class="nav-text">汇编阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链接阶段"><span class="nav-number">1.4.</span> <span class="nav-text">链接阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ELF可执行文件"><span class="nav-number">1.5.</span> <span class="nav-text">ELF可执行文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、可执行程序、共享库和动态链接"><span class="nav-number">2.</span> <span class="nav-text">二、可执行程序、共享库和动态链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、可执行程序的装载"><span class="nav-number">3.</span> <span class="nav-text">三、可执行程序的装载</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#在linux中一个程序是如何加载运行的"><span class="nav-number">3.1.</span> <span class="nav-text">在linux中一个程序是如何加载运行的</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#exec系统调用"><span class="nav-number">3.1.1.</span> <span class="nav-text">exec系统调用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#load-elf-binary"><span class="nav-number">3.1.2.</span> <span class="nav-text">load_elf_binary</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、实验部分"><span class="nav-number">4.</span> <span class="nav-text">四、实验部分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#修改menu代码"><span class="nav-number">4.1.</span> <span class="nav-text">修改menu代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、理解总结"><span class="nav-number">5.</span> <span class="nav-text">五、理解总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
     </div>
