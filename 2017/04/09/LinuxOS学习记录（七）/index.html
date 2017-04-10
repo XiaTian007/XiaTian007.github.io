@@ -98,7 +98,11 @@
 <meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson72017-04-10_105335.jpg">
 <meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson72017-04-10_104354.jpg">
 <meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/2017-04-10_110019.jpg">
-<meta property="og:updated_time" content="2017-04-10T03:10:40.445Z">
+<meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson72017-04-10_110819.jpg">
+<meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson72017-04-10_112249.jpg">
+<meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson72017-04-10_113023.jpg">
+<meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson72017-04-10_113003.jpg">
+<meta property="og:updated_time" content="2017-04-10T03:36:41.212Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LinuxOS学习记录（七）">
 <meta name="twitter:description" content="Linux中可执行程序的装载！">
@@ -318,7 +322,7 @@
                 <i class="fa fa-calendar-check-o"></i>
               </span>
               <span class="post-meta-item-text">更新于</span>
-              <time title="更新于" itemprop="dateModified" datetime="2017-04-10T11:10:40+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2017-04-10T11:36:41+08:00">
                 2017-04-10
               </time>
             
@@ -428,9 +432,15 @@
 <p><img src="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson72017-04-10_104354.jpg" alt=""></p>
 <p><img src="http://oiwadb81v.bkt.clouddn.com/2017-04-10_110019.jpg" alt=""></p>
 <h2 id="四、实验部分"><a href="#四、实验部分" class="headerlink" title="四、实验部分"></a>四、实验部分</h2><h3 id="修改menu代码"><a href="#修改menu代码" class="headerlink" title="修改menu代码"></a>修改menu代码</h3><p>下载新版menu代码后执行<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mv test_exec<span class="selector-class">.c</span> test<span class="selector-class">.c</span></div><div class="line">make rootfs</div></pre></td></tr></table></figure></p>
-<p>可以看到menuOS里多出了两个命令：<br>exec和fork。本次试验主要测试exec，代码如下：</p>
+<p>可以看到menuOS里多出了两个命令：<br><img src="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson72017-04-10_110819.jpg" alt=""><br>exec和fork。本次试验主要测试exec，代码如下：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">Exec</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">int</span> pid;</div><div class="line">	<span class="comment">/* fork another process */</span></div><div class="line">	pid = fork();</div><div class="line">	<span class="keyword">if</span> (pid &lt; <span class="number">0</span>) </div><div class="line">	&#123; </div><div class="line">		<span class="comment">/* error occurred */</span></div><div class="line">		<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,<span class="string">"Fork Failed!"</span>);</div><div class="line">		<span class="built_in">exit</span>(<span class="number">-1</span>);</div><div class="line">	&#125; </div><div class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (pid == <span class="number">0</span>) </div><div class="line">	&#123;</div><div class="line">		<span class="comment">/*	 child process 	*/</span></div><div class="line">    	<span class="built_in">printf</span>(<span class="string">"This is Child Process!\n"</span>);</div><div class="line">		execlp(<span class="string">"/hello"</span>,<span class="string">"hello"</span>,<span class="literal">NULL</span>);</div><div class="line">	&#125; </div><div class="line">	<span class="keyword">else</span> </div><div class="line">	&#123; 	</div><div class="line">		<span class="comment">/* 	parent process	 */</span></div><div class="line">    	<span class="built_in">printf</span>(<span class="string">"This is Parent Process!\n"</span>);</div><div class="line">		<span class="comment">/* parent will wait for the child to complete*/</span></div><div class="line">		wait(<span class="literal">NULL</span>);</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"Child Complete!\n"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>现在用gdb跟踪sys_execve。</p>
+<p>现在用gdb跟踪sys_execve。<br>本次断点设置主要为：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">b</span> sys_execve</div><div class="line"><span class="selector-tag">b</span> load_elf_binary</div><div class="line"><span class="selector-tag">b</span> start_thread</div></pre></td></tr></table></figure></p>
+<p>先停在<code>sys_execve</code>在设置其他断点比较好，因为在menuOS启动过程初始化中，会调用到<code>load_elf_binary</code>及<code>start_thread</code>，此时也会暂停，所以先停在<code>sys_execve</code>处在设置其他断点方便调试。</p>
+<p>继续执行，并调用exec命令，发现此处与视频不一样，多输出了一个<br><code>This is Parent Process</code><br>这是因为fork出的父子进程会进行任务调度，两次运行的执行顺序不一定一样，所以此处先执行了父进程，再执行子进程，并在调用exec时中断。<br><img src="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson72017-04-10_112249.jpg" alt=""></p>
+<p>执行中断，直接进行到<code>start_thread</code><br><img src="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson72017-04-10_113023.jpg" alt=""></p>
+<p>查看hello elf文件<code>readelf -h hello</code></p>
+<p><img src="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson72017-04-10_113003.jpg" alt=""></p>
+<p>此时新的可执行程序就装载完毕了，当<code>start_thread</code>赋值完<code>eip</code>之后，调用iret返回的便是新程序的进程的执行上下文环境了。</p>
 <h2 id="五、理解总结"><a href="#五、理解总结" class="headerlink" title="五、理解总结"></a>五、理解总结</h2><ol>
 <li><p>执行文件的创建包括预处理、编译、汇编、链接四个阶段。</p>
 </li>
