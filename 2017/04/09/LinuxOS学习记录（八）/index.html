@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Linux,OS," />
 
 
 
@@ -84,16 +84,21 @@
 
 
 
-<meta name="description" content="Welcom to my Dream World">
+<meta name="description" content="进程的切换和系统的一般执行过程！">
 <meta property="og:type" content="article">
 <meta property="og:title" content="LinuxOS学习记录（八）">
 <meta property="og:url" content="http://github.summer007.com/2017/04/09/LinuxOS学习记录（八）/index.html">
 <meta property="og:site_name" content="Dream World">
-<meta property="og:description" content="Welcom to my Dream World">
-<meta property="og:updated_time" content="2017-04-09T10:12:05.794Z">
+<meta property="og:description" content="进程的切换和系统的一般执行过程！">
+<meta property="og:image" content="https://dn-simplecloud.shiyanlou.com/2651591491357910261-wm">
+<meta property="og:image" content="https://dn-simplecloud.shiyanlou.com/2651591491358414266-wm">
+<meta property="og:image" content="https://dn-simplecloud.shiyanlou.com/2651591491358583355-wm">
+<meta property="og:image" content="https://dn-simplecloud.shiyanlou.com/2651591491358668405-wm">
+<meta property="og:updated_time" content="2017-04-16T16:25:53.263Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LinuxOS学习记录（八）">
-<meta name="twitter:description" content="Welcom to my Dream World">
+<meta name="twitter:description" content="进程的切换和系统的一般执行过程！">
+<meta name="twitter:image" content="https://dn-simplecloud.shiyanlou.com/2651591491357910261-wm">
 
 
 
@@ -309,8 +314,8 @@
                 <i class="fa fa-calendar-check-o"></i>
               </span>
               <span class="post-meta-item-text">更新于</span>
-              <time title="更新于" itemprop="dateModified" datetime="2017-04-09T18:12:05+08:00">
-                2017-04-09
+              <time title="更新于" itemprop="dateModified" datetime="2017-04-17T00:25:53+08:00">
+                2017-04-17
               </time>
             
           </span>
@@ -336,6 +341,10 @@
           
 
           
+              <div class="post-description">
+                  进程的切换和系统的一般执行过程！
+              </div>
+          
 
         </div>
       </header>
@@ -348,7 +357,45 @@
       
 
       
-        
+        <h2 id="进程的调度时机与进程的切换"><a href="#进程的调度时机与进程的切换" class="headerlink" title="进程的调度时机与进程的切换"></a>进程的调度时机与进程的切换</h2><p>操作系统原理中介绍了大量进程调度算法，这些算法从实现的角度看仅仅是从运行队列中选择一个新进程，选择的过程中运用了不同的策略而已。</p>
+<p>对于理解操作系统的工作机制，反而是进程的调度时机与进程的切换机制更为关键。</p>
+<h3 id="进程调度的时机"><a href="#进程调度的时机" class="headerlink" title="进程调度的时机"></a>进程调度的时机</h3><ul>
+<li>中断处理过程（包括时钟中断、I/O中断、系统调用和异常）中，直接调用schedule()，或者返回用户态时根据need_resched标记调用schedule()；</li>
+<li>内核线程可以直接调用schedule()进行进程切换，也可以在中断处理过程中进行调度，也就是说内核线程作为一类的特殊的进程可以主动调度，也可以被动调度；</li>
+<li>用户态进程无法实现主动调度，仅能通过陷入内核态后的某个时机点进行调度，即在中断处理过程中进行调度。</li>
+</ul>
+<h3 id="进程的切换"><a href="#进程的切换" class="headerlink" title="进程的切换"></a>进程的切换</h3><ul>
+<li>为了控制进程的执行，内核必须有能力挂起正在CPU上执行的进程，并恢复以前挂起的某个进程的执行，这叫做进程切换、任务切换、上下文切换；</li>
+<li>挂起正在CPU上执行的进程，与中断时保存现场是不同的，中断前后是在同一个进程上下文中，只是由用户态转向内核态执行；</li>
+<li>进程上下文包含了进程执行需要的所有信息</li>
+<li>用户地址空间：包括程序代码，数据，用户堆栈等</li>
+<li>控制信息：进程描述符，内核堆栈等</li>
+<li>硬件上下文（注意中断也要保存硬件上下文只是保存的方法不同）</li>
+<li><code>schedule()</code>函数选择一个新的进程来运行，并调用<code>context_switch</code>进行上下文的切换，这个宏调用<code>switch_to</code>来进行关键上下文切换<ul>
+<li><code>next = pick_next_task(rq, prev);//进程调度算法都封装这个函数内部</code></li>
+<li><code>context_switch(rq, prev, next);//进程上下文切换</code></li>
+<li><code>switch_to</code>利用了<code>prev</code>和<code>next</code>两个参数：<code>prev</code>指向当前进程，<code>next</code>指向被调度的进程</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"><span class="number">31#</span>define switch_to(prev, <span class="keyword">next</span>, last)                    \</div><div class="line"><span class="number">32d</span>o &#123;                                 \</div><div class="line"><span class="symbol">33 </span> /*                              \</div><div class="line"><span class="symbol">34 </span>  * Context-switching clobbers all registers, so we clobber  \</div><div class="line"><span class="symbol">35 </span>  * them explicitly, via unused output variables.     \</div><div class="line"><span class="symbol">36 </span>  * (EAX <span class="keyword">and</span> EBP is <span class="keyword">not</span> listed because EBP is saved/restored  \</div><div class="line"><span class="symbol">37 </span>  * explicitly <span class="keyword">for</span> wchan access <span class="keyword">and</span> EAX is the <span class="keyword">return</span> value of   \</div><div class="line"><span class="symbol">38 </span>  * __switch_to())                     \</div><div class="line"><span class="symbol">39 </span>  */                                \</div><div class="line"><span class="symbol">40 </span> unsigned long ebx, ecx, edx, esi, edi;                \</div><div class="line"><span class="symbol">41 </span>                                 \</div><div class="line"><span class="symbol">42 </span> asm volatile(<span class="string">"pushfl\n\t"</span>      /* <span class="keyword">save</span>    flags */   \</div><div class="line"><span class="symbol">43 </span>          <span class="string">"pushl %%ebp\n\t"</span>        /* <span class="keyword">save</span>    EBP   */ \</div><div class="line"><span class="symbol">44 </span>          <span class="string">"movl %%esp,%[prev_sp]\n\t"</span>  /* <span class="keyword">save</span>    ESP   */ \</div><div class="line"><span class="symbol">45 </span>          <span class="string">"movl %[next_sp],%%esp\n\t"</span>  /* <span class="keyword">restore</span> ESP   */ \</div><div class="line"><span class="symbol">46 </span>          <span class="string">"movl $1f,%[prev_ip]\n\t"</span>    /* <span class="keyword">save</span>    EIP   */ \</div><div class="line"><span class="symbol">47 </span>          <span class="string">"pushl %[next_ip]\n\t"</span>   /* <span class="keyword">restore</span> EIP   */    \</div><div class="line"><span class="symbol">48 </span>          __switch_canary                   \</div><div class="line"><span class="symbol">49 </span>          <span class="string">"jmp __switch_to\n"</span>  /* regparm <span class="keyword">call</span>  */ \</div><div class="line"><span class="symbol">50 </span>          <span class="string">"1:\t"</span>                        \</div><div class="line"><span class="symbol">51 </span>          <span class="string">"popl %%ebp\n\t"</span>     /* <span class="keyword">restore</span> EBP   */    \</div><div class="line"><span class="symbol">52 </span>          <span class="string">"popfl\n"</span>         /* <span class="keyword">restore</span> flags */  \</div><div class="line"><span class="symbol">53 </span>                                 \</div><div class="line"><span class="symbol">54 </span>          /* output parameters */                \</div><div class="line"><span class="symbol">55 </span>          : [prev_sp] <span class="string">"=m"</span> (prev-&gt;thread.sp),     \</div><div class="line"><span class="symbol">56 </span>            [prev_ip] <span class="string">"=m"</span> (prev-&gt;thread.ip),        \</div><div class="line"><span class="symbol">57 </span>            <span class="string">"=a"</span> (last),                 \</div><div class="line"><span class="symbol">58 </span>                                 \</div><div class="line"><span class="symbol">59 </span>            /* clobbered output registers: */     \</div><div class="line"><span class="symbol">60 </span>            <span class="string">"=b"</span> (ebx), <span class="string">"=c"</span> (ecx), <span class="string">"=d"</span> (edx),      \</div><div class="line"><span class="symbol">61 </span>            <span class="string">"=S"</span> (esi), <span class="string">"=D"</span> (edi)             \</div><div class="line"><span class="symbol">62 </span>                                      \</div><div class="line"><span class="symbol">63 </span>            __switch_canary_oparam                \</div><div class="line"><span class="symbol">64 </span>                                 \</div><div class="line"><span class="symbol">65 </span>            /* <span class="keyword">input</span> parameters: */                \</div><div class="line"><span class="symbol">66 </span>          : [next_sp]  <span class="string">"m"</span> (<span class="keyword">next</span>-&gt;thread.sp),        \</div><div class="line"><span class="symbol">67 </span>            [next_ip]  <span class="string">"m"</span> (<span class="keyword">next</span>-&gt;thread.ip),       \</div><div class="line"><span class="symbol">68 </span>                                      \</div><div class="line"><span class="symbol">69 </span>            /* regparm parameters <span class="keyword">for</span> __switch_to(): */  \</div><div class="line"><span class="symbol">70 </span>            [prev]     <span class="string">"a"</span> (prev),              \</div><div class="line"><span class="symbol">71 </span>            [<span class="keyword">next</span>]     <span class="string">"d"</span> (<span class="keyword">next</span>)               \</div><div class="line"><span class="symbol">72 </span>                                 \</div><div class="line"><span class="symbol">73 </span>            __switch_canary_iparam                \</div><div class="line"><span class="symbol">74 </span>                                 \</div><div class="line"><span class="symbol">75 </span>          : /* reloaded segment registers */           \</div><div class="line"><span class="symbol">76 </span>         <span class="string">"memory"</span>);                  \</div><div class="line"><span class="number">77</span>&#125; <span class="keyword">while</span> (<span class="number">0</span>)</div></pre></td></tr></table></figure>
+<h2 id="Linux系统的一般执行过程"><a href="#Linux系统的一般执行过程" class="headerlink" title="Linux系统的一般执行过程"></a>Linux系统的一般执行过程</h2><ol>
+<li>Linux系统的一般执行过程分析<br>正在运行的用户态进程X切换到运行用户态进程Y的过程<br>正在运行的用户态进程X<br>发生中断——<br><code>save cs:eip/esp/eflags(current) to kernel stack；</code><br><code>then load cs:eip(系统调用的起点，entry of a specific ISR) ``and ss:esp(point to kernel stack)</code><br>进入内核代码，<code>SAVE_ALL</code>//保存现场<br>中断处理过程中或中断返回前调用了<code>schedule()</code>（可能不发生，诺发生，则其中的<code>switch_to</code>做了关键的进程上下文切换）<br>标号1之后开始运行上一步中选中的用户态进程Y(这里Y曾经通过以上步骤被切换出去过因此可以从标号1继续执行)<br><code>restore_all</code> //恢复现场<br><code>iret - pop cs:eip/ss:esp/eflags from kernel stack</code><br>继续运行用户态进程Y</li>
+</ol>
+<p>###　Linux系统执行过程中的几个特殊情况</p>
+<p>通过中断处理过程中的调度时机，用户态进程与内核线程之间互相切换和内核线程之间互相切换，与最一般的情况非常类似，只是内核线程运行过程中发生中断的时候没有进程用户态和内核态的转换，cs不会变化；<br>内核线程主动调用<code>schedule()</code>，只有进程上下文的切换，没有发生中断上下文的切换，也不需要从中断中返回，与最一般的情况相比更简略；<br>创建子进程的系统调用在子进程中的执行起点（如<code>ret_from_fork</code>，上文中也已经提到过)及返回用户态；<br>加载一个新的可执行程序后返回到用户态的情况，如<code>execve</code>，在新进程内部修改了中断保存的信息<br>3.内核<br>（1）进程的地址空间一共有4G，3G以上只有内核态可以访问，0至3G用户态可以访问<br>（2）每一个进程都可以陷入内核，然后返回用户态，没有进程就空转</p>
+<h2 id="Linux操作系统架构和执行过程概览"><a href="#Linux操作系统架构和执行过程概览" class="headerlink" title="Linux操作系统架构和执行过程概览"></a>Linux操作系统架构和执行过程概览</h2><p>1.linux操作系统架构概览<br>（1）操作系统：计算机系统包含的一个基本的程序集合<br>（2）目的：<br>与硬件交互<br>为用户程序提供一个良好的执行环境<br>2.执行ls命令<br>在控制台输入ls命令<br><code>Shell</code>程序分析输入参数，确定这是ls<br>调用系统调用fork生成一个shell本身的拷贝<br>调用exec系统调用将ls可执行文件装入内存<br>从系统调用返回<br><code>Shell</code>和<code>ls</code>都得到执行<br>3.从CPU和内存角度看Linux系统执行<br>执行<code>gets()</code>函数；<br>执行系统调用，陷入内核；<br>等待输入，CPU会调度其他进程执行，同时wait一个I/O中断；<br>敲击ls，发I/O中断给CPU，中断处理程序进行现场保存、压栈等等；<br>中断处理程序发现X进程在等待这个I/O（此时X已经变成阻塞态），处理程序将X设置为<code>WAKE_UP</code>;<br>进程管理可能会把进程X设置为next进程，这样gets系统调用获得数据，再返回用户态堆栈<br>从内存角度看，所有的物理地址都会被映射到3G以上的地址空间：因为这部分对所有进程来说都是共享的</p>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>gdb开始调试，设置监视、加载文件符号表调试并设置断点<br>set break ponit at schedule context_switch switch to<br><img src="https://dn-simplecloud.shiyanlou.com/2651591491357910261-wm" alt="config"><br>在schedule处断点<br><img src="https://dn-simplecloud.shiyanlou.com/2651591491358414266-wm" alt="config"><br>可以看到函数如下图<br><img src="https://dn-simplecloud.shiyanlou.com/2651591491358583355-wm" alt="config"><br><img src="https://dn-simplecloud.shiyanlou.com/2651591491358668405-wm" alt="config"></p>
+<h3 id="三、总结"><a href="#三、总结" class="headerlink" title="三、总结"></a>三、总结</h3><p>最一般的情况：正在运行的用户态进程X切换到运行用户态进程Y的过程</p>
+<p>(1)正在运行的用户态进程X</p>
+<p>(2)发生中断——<code>savecs:eip/esp/eflags(current) to kernel stack,then load cs:eip(entry of a specificISR) and ss:esp(point to kernel stack).</code></p>
+<p>(3)<code>SAVE_ALL</code> //保存现场</p>
+<p>(4)中断处理过程中或中断返回前调用了<code>schedule()</code>，其中的<code>switch_to</code>做了关键的进程上下文切换</p>
+<p>(5)标号1之后开始运行用户态进程Y(这里Y曾经通过以上步骤被切换出去过因此可以从标号1继续执行)</p>
+<p>(6)<code>restore_all</code> //恢复现场</p>
+<p>(7)<code>iret - pop cs:eip/ss:esp/eflags from kernel stack</code></p>
+<p>(8)继续运行用户态进程Y</p>
+
       
     </div>
 
@@ -368,6 +415,14 @@
 
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+            <a href="/tags/OS/" rel="tag"># OS</a>
+          
+        </div>
       
 
       
@@ -452,8 +507,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -535,6 +599,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#进程的调度时机与进程的切换"><span class="nav-number">1.</span> <span class="nav-text">进程的调度时机与进程的切换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#进程调度的时机"><span class="nav-number">1.1.</span> <span class="nav-text">进程调度的时机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进程的切换"><span class="nav-number">1.2.</span> <span class="nav-text">进程的切换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux系统的一般执行过程"><span class="nav-number">2.</span> <span class="nav-text">Linux系统的一般执行过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux操作系统架构和执行过程概览"><span class="nav-number">3.</span> <span class="nav-text">Linux操作系统架构和执行过程概览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验"><span class="nav-number">4.</span> <span class="nav-text">实验</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#三、总结"><span class="nav-number">4.1.</span> <span class="nav-text">三、总结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
     </div>
