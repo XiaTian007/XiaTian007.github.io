@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="OS,linux," />
 
 
 
@@ -84,16 +84,16 @@
 
 
 
-<meta name="description" content="Welcom to my Dream World">
+<meta name="description" content="LinuxOS学习要告一段落啦！">
 <meta property="og:type" content="article">
 <meta property="og:title" content="linuxOS学习记录（总结篇）">
 <meta property="og:url" content="http://github.summer007.com/2017/04/23/linuxOS学习记录（总结篇）/index.html">
 <meta property="og:site_name" content="Dream World">
-<meta property="og:description" content="Welcom to my Dream World">
-<meta property="og:updated_time" content="2017-04-23T12:17:17.287Z">
+<meta property="og:description" content="LinuxOS学习要告一段落啦！">
+<meta property="og:updated_time" content="2017-04-23T13:36:30.126Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linuxOS学习记录（总结篇）">
-<meta name="twitter:description" content="Welcom to my Dream World">
+<meta name="twitter:description" content="LinuxOS学习要告一段落啦！">
 
 
 
@@ -309,7 +309,7 @@
                 <i class="fa fa-calendar-check-o"></i>
               </span>
               <span class="post-meta-item-text">更新于</span>
-              <time title="更新于" itemprop="dateModified" datetime="2017-04-23T20:17:17+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2017-04-23T21:36:30+08:00">
                 2017-04-23
               </time>
             
@@ -336,6 +336,10 @@
           
 
           
+              <div class="post-description">
+                  LinuxOS学习要告一段落啦！
+              </div>
+          
 
         </div>
       </header>
@@ -348,7 +352,50 @@
       
 
       
-        
+        <h2 id="第一周：计算机是如何工作的"><a href="#第一周：计算机是如何工作的" class="headerlink" title="第一周：计算机是如何工作的"></a>第一周：<a href="http://www.github.summer007.com/2017/02/26/linuxOS%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%EF%BC%88%E4%B8%80%EF%BC%89/" target="_blank" rel="external">计算机是如何工作的</a></h2><p>###　通过程序的汇编级运行分析来表现计算机运行的大致过程。</p>
+<p>计算机在运行时，先从内存中取出第一条指令，通过控制器的译码，按指令的要求，从存储器中取出数据进行指定的运算和逻辑操作等加工，然后再按地址把结果送到内存中去。接下来，再取出第二条指令，在控制器的指挥下完成规定操作。依此进行下去。直至遇到停止指令。简单来说就是CPU负责处理和运算，存储器负责保存指令和数据。通过操作系统得调度和安排，不停地进行取址、译码、执行的循环。</p>
+<p>冯诺依曼体系结构的核心就是存储和控制流程，预先要把指挥计算机如何进行操作的指令序列（称为程序）和原始数据通过输入设备输送到计算机内存贮器中。每一条指令中明确规定了计算机从哪个地址取数，进行什么操作，然后送到什么地址去等步骤。计算机之所以能自动，正确的按人们的意图工作，是由于人们事先已把计算机如何工作的程序和原始数据通过输入设备送到计算机的存储器中。当计算机执行时，控制器就把这些指令一条接一条地从存储器中取出来，加以翻译，并按指令的要求进行相应的操作，直到遇到停止指令或发生计算机无法继续运行的情况为止。</p>
+<p>所以简单来说机器本身仍然是一个死板的只会步就班的执行程序，但程序员能通过编写程序来赋予机器灵魂以适应各种复杂作业。</p>
+<h2 id="第二周：操作系统是如何工作的"><a href="#第二周：操作系统是如何工作的" class="headerlink" title="第二周：操作系统是如何工作的"></a>第二周：<a href="http://www.github.summer007.com/2017/03/04/linuxOS%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%EF%BC%88%E4%BA%8C%EF%BC%89/" target="_blank" rel="external">操作系统是如何工作的</a></h2><h3 id="通过mykernel操作系统的演示和代码的分析，从宏观调度算法等角度表现操作系统的运行过程及其对各个进程的切换过程。"><a href="#通过mykernel操作系统的演示和代码的分析，从宏观调度算法等角度表现操作系统的运行过程及其对各个进程的切换过程。" class="headerlink" title="通过mykernel操作系统的演示和代码的分析，从宏观调度算法等角度表现操作系统的运行过程及其对各个进程的切换过程。"></a>通过mykernel操作系统的演示和代码的分析，从宏观调度算法等角度表现操作系统的运行过程及其对各个进程的切换过程。</h3><p>操作系统的内核有一个起始位置，从这个起始位置开始执行。在执行了一些初始化操作，比如进程的状态设置，各个进程的栈的空间的分配后，将CPU分配给第一个进程，开始执行第一个进程，然后通过一定的调度算法，比如时间片轮转，在一个时间片后，发生中断，第一个进程被阻塞，在完成保存现场后将CPU分配给下一个进程，执行下一个进程。这样，操作系统就完成了基本的进程调度的功能。</p>
+<h2 id="第三周：构造一个简单的Linux系统MenuOS"><a href="#第三周：构造一个简单的Linux系统MenuOS" class="headerlink" title="第三周：构造一个简单的Linux系统MenuOS"></a>第三周：<a href="http://www.github.summer007.com/2017/03/12/linuxOS%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%EF%BC%88%E4%B8%89%EF%BC%89/" target="_blank" rel="external">构造一个简单的Linux系统MenuOS</a></h2><p>内核启动过程包括<code>start_kernel</code>之前和之后，之前全部是做初始化的汇编指令（硬件平台相关），之后开始C代码的操作系统初始化（硬件平台无关），最后执行第一个用户态进程init</p>
+<p>结合中国传统文化的角度看，道生一（<code>start_kernel</code>….<code>cpu_idle</code>），一生二（<code>kernel_init</code>和<code>kthreadd</code>），二生三（即前面0、1和2三个进程），三生万物（1号进程是所有用户态进程的祖先，2号进程是所有内核线程的祖先）</p>
+<h2 id="第四周：扒开系统调用的三层皮（上）"><a href="#第四周：扒开系统调用的三层皮（上）" class="headerlink" title="第四周：扒开系统调用的三层皮（上）"></a>第四周：<a href="http://www.github.summer007.com/2017/03/19/LinuxOS%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%EF%BC%88%E5%9B%9B%EF%BC%89/" target="_blank" rel="external">扒开系统调用的三层皮（上）</a></h2><p>即便是最简单的程序，也难免要用到诸如输入、输出以及退出等操作，而要进行这些操作则需要调用操作系统所提供的服务，也就是系统调用（<a href="http://codelab.shiyanlou.com/xref/linux-3.18.6/arch/x86/syscalls/syscall_32.tbl" target="_blank" rel="external">系统调用列表</a>）。除非你的程序只完成加减乘除等数学运算，否则将很难避免使用系统调用。在 Linux 平台下有两种方式来使用系统调用：利用封装后的 C 库（libc）或者通过汇编直接调用。<br>Linux 下的系统调用是通过中断（<code>int 0x80</code>）来实现的。在执行 int 80 指令时，寄存器 eax 中存放的是系统调用的功能号，而传给系统调用的参数则必须按顺序放到寄存器<code>ebx，ecx，edx，esi，edi</code>中，当系统调用完成之后，返回值可以在寄存器 eax 中获得。<br>所有的系统调用功能号都可以在文件 <code>/usr/include/bits/syscall.h</code> 中找到，为了便于使用，它们是用 <code>SYS_&lt;name&gt;</code>这样的宏来定义的，如 <code>SYS_write、SYS_exit</code> 等。例如，经常用到的 write 函数是如下定义的：<br><code>ssize_t write(int fd, const void *buf, size_t count);</code><br>该函数的功能最终是通过 <code>SYS_write</code>这一系统调用来实现的。<br>或许你已经发现，在进行系统调用时至多只有 5 个寄存器能够用来保存参数，难道所有系统调用的参数个数都不超过 5 吗？当然不是，例如 mmap 函数就有 6 个参数，这些参数最后都需要传递给系统调用 <code>SYS_mmap</code>：<br><code>void  *  mmap(void *start, size_t length, int prot , int flags, int fd, off_t offset);</code><br>当一个系统调用所需的参数个数大于 5 时，执行<code>int 0x80</code>指令时仍需将系统调用功能号保存在寄存器 <code>eax</code> 中，所不同的只是全部参数应该依次放在一块连续的内存区域里，同时在寄存器 ebx 中保存指向该内存区域的指针。系统调用完成之后，返回值仍将保存在寄存器 <code>eax</code>中。<br>由于只是需要一块连续的内存区域来保存系统调用的参数，因此完全可以像普通的函数调用一样使用栈(<code>stack</code>)来传递系统调用所需的参数。但要注意一点，Linux 采用的是 C 语言的调用模式，这就意味着所有参数必须以相反的顺序进栈，即最后一个参数先入栈，而第一个参数则最后入栈。如果采用栈来传递系统调用所需的参数，在执行<code>int 0x80</code> 指令时还应该将栈指针的当前值复制到寄存器 <code>ebx</code>中。</p>
+<h2 id="第五周-扒开系统调用的三层皮（下）"><a href="#第五周-扒开系统调用的三层皮（下）" class="headerlink" title="第五周:扒开系统调用的三层皮（下）"></a>第五周:<a href="http://www.github.summer007.com/2017/03/26/LinuxOS%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%EF%BC%88%E4%BA%94%EF%BC%89/" target="_blank" rel="external">扒开系统调用的三层皮（下）</a></h2><p>在系统调用返回之前，可能会发生进程调度（<code>call_schedule</code>），其中可能还会发生中断上下文的切换和进程上下文的切换；</p>
+<p>在当前进程的时候，有些信号可能需要处理；</p>
+<p>使用gdb可以方便的跟踪内核执行进度，但对于汇编代码部分则不方便跟踪；</p>
+<p>内核可以抽象成是很多种不同的中断处理过程的集合。</p>
+<h2 id="第六周：进程的描述和进程的创建"><a href="#第六周：进程的描述和进程的创建" class="headerlink" title="第六周：进程的描述和进程的创建"></a>第六周：<a href="http://www.github.summer007.com/2017/04/02/LinuxOS%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%EF%BC%88%E5%85%AD%EF%BC%89/" target="_blank" rel="external">进程的描述和进程的创建</a></h2><p>可以看出，<code>fork()</code>中，内核并不立刻为新进程分配代码和数据物理内存页，新进程与父进程共同使用父进程已有的代码和数据物理内存页面。只有当以后执行过程中由一个进程一写方式访问内存时候被访问的内存页面才会在写操作之前被复制到新申请的内存页面中。另外在fork的最后是将任务设置成了就绪状态，由于<code>fork（）</code>是一个系统调用，在系统调用部分<code>system_call.s</code>，可以看到在系统函数返回后，会调用调度函数<code>schedule（</code>），在schedule()中，就会检测到新进程的就绪状态，并用<code>switch_to()</code>切换到新进程进行执行。</p>
+<p>具体过程是：首先在内存中申请一页内存存放进程控制块<code>task_struct</code>，并返回进程号<code>nr</code>，并在<code>task</code>数组的nr处存放<code>task_struct</code>的指针，还要将<code>task</code>的当前指针<code>current</code>指到<code>nr</code>处；然后将父进程的<code>task_struct</code>的内容复制到新进程的<code>task_struct</code>中作为模版；之后我们对<code>task_struct</code>中的信息进行修改，主要进行一下工作：设置父进程、清除信号位图、时间片、运行时间、根据当前环境设置<code>tss</code>（内核态指针<code>esp0</code>指向<code>task_struct</code>所在页的顶端）、设置<code>LDT</code>的选择子等(根据<code>nr</code>指向<code>GDT</code>中相应的<code>ldt</code>描述符)。 在之后我们要设置新进程的代码段、数据段的基地址和段长：更新<code>task_struct</code>中的代码开始地址：更新<code>task_struct</code>中局部描述符表中的代码段和数据段描述符。然后再复制父进程的页表目录项和页表：在页目录表中，复制父进程的页表目录项，目的地址由新进程的线性地址计算出来；对每个对应的页表目录项申请一个空闲页，并用页表地址更新页表目录项，最后将父进程页表中各项复制到新进程对应的页表中，也就是说，这个时候，子进程与父进程共享物理内存。并且更新<code>task_struct</code>中的文件信息：文件打开次数加1，父进程的当前目录引用数加1。还要设置<code>TSS</code>和<code>LDT</code>描述符项：在全局描述符表（<code>GDT</code>）中设置新任务的<code>TSS</code>描述符项和<code>LDT</code>段的描述符项，使<code>TSS</code>描述符项和<code>LDT</code>描述符项分别指向<code>task_struct</code>的<code>TSS</code>结构和<code>LDT</code>结构。最后我们将任务设置为就绪状态，向当前进程（父进程）返回新进程号。</p>
+<p>最后总结一下，Linux进程的创建过程就是内存中进程相关资源产生的过程，就是<code>clone</code>的过程。例如<code>task _struct</code>、内核态堆栈、线型地址到物理地址的映射表、全局描述表（<code>GDT</code>）中的任务状态段，局部描述符表、代码段、堆、栈、参数全局变量等数据区什么的。上面提到的这几类资源中，很多都与<code>task_struct</code>有关，所以我想说一下<code>task_struct</code>。它是<code>Linux</code>的进程控制块，驻留在内存中，描述进程的基本信息，所以它是进程操作依据的重要数据结构。<code>Linux</code>中一般进程都是由现有的一个进程创建的，也就是我们所说的父进程，子进程。具体的创建是通过<code>fork()</code>实现的。</p>
+<h2 id="第七周：Linux中可执行程序的装载"><a href="#第七周：Linux中可执行程序的装载" class="headerlink" title="第七周：Linux中可执行程序的装载"></a>第七周：<a href="http://www.github.summer007.com/2017/04/09/LinuxOS%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%EF%BC%88%E4%B8%83%EF%BC%89/" target="_blank" rel="external">Linux中可执行程序的装载</a></h2><ol>
+<li><p>执行文件的创建包括预处理、编译、汇编、链接四个阶段。</p>
+</li>
+<li><p>学习并了解了ELF文件的格式，了解了ELF文件头、段头表、text节等各个组成部分。</p>
+</li>
+<li><p>通过对源码的追踪分析，理解了可执行程序加载的大致流程。当执行到execve系统调用时，陷入内核态，用execve加载的可执行文件覆盖当前进程的可执行程序，当execve系统调用返回时，返回新的可执行程序的执行起点。</p>
+</li>
+<li><p>如果是静态链接，<code>elf_entry</code>指向可执行文件规定的头部（main函数对应的位置0x8048<em>*</em>）如果需要依赖动态链接库，<code>elf_entry</code>指向动态链接器的起点。动态链接主要是由动态链接器ld来完成的。</p>
+</li>
+<li><p>可执行文件描述了如何初始化一个新的执行上下文，也就是如何开始一个新的计算。可执行文件类别有很多，在内核中有一个链表，在init的时候会将支持的可执行程序解析程序注册添加到链表中，那么在对可执行文件进行解析时，就从链表头开始找，找到匹配的处理函数就可以对其进行解析。 </p>
+</li>
+<li><p>在shell中启动一个可执行程序时，会创建一个新进程，它通过覆盖父进程（也就是shell进程）的进程环境，并将用户态堆栈清空，获得所需要的执行上下文环境。 </p>
+</li>
+<li><p>命令行参数和环境变量会通过shell传递给<code>execve</code>，<code>excve</code>通过系统调用参数传递，传递给<code>sys_execve</code>，最后<code>sys_execve</code>在初始化新进程堆栈的时候拷贝进去。 </p>
+</li>
+<li><p><code>load_elf_binary-&gt;start_thread(…)</code>通过修改内核堆栈中EIP的值作为新程序的起点。 如果新程序的动态链接的，那么就需要加载所需要的库函数，动态连接器ld会负责加载过程，动态链接库的装载过程类似于一个图的广度优先遍历过程，装载完成后，ld将CPU控制权交给可执行程序，继续执行可执行程序。</p>
+</li>
+</ol>
+<h2 id="第八周：进程的切换和系统的一般执行过程"><a href="#第八周：进程的切换和系统的一般执行过程" class="headerlink" title="第八周：进程的切换和系统的一般执行过程"></a>第八周：<a href="http://www.github.summer007.com/2017/04/09/LinuxOS%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%EF%BC%88%E5%85%AB%EF%BC%89/" target="_blank" rel="external">进程的切换和系统的一般执行过程</a></h2><p>最一般的情况：正在运行的用户态进程X切换到运行用户态进程Y的过程</p>
+<p>(1)正在运行的用户态进程X</p>
+<p>(2)发生中断——<code>savecs:eip/esp/eflags(current) to kernel stack,then load cs:eip(entry of a specificISR) and ss:esp(point to kernel stack).</code></p>
+<p>(3)<code>SAVE_ALL</code> //保存现场</p>
+<p>(4)中断处理过程中或中断返回前调用了<code>schedule()</code>，其中的<code>switch_to</code>做了关键的进程上下文切换</p>
+<p>(5)标号1之后开始运行用户态进程Y(这里Y曾经通过以上步骤被切换出去过因此可以从标号1继续执行)</p>
+<p>(6)<code>restore_all</code> //恢复现场</p>
+<p>(7)<code>iret - pop cs:eip/ss:esp/eflags from kernel stack</code></p>
+<p>(8)继续运行用户态进程Y</p>
+<h2 id="心得总结："><a href="#心得总结：" class="headerlink" title="心得总结："></a>心得总结：</h2><p>经过两个月的学习，对操作系统的启动、系统功能调用、函数堆栈、进程的创建、切换和可执行程序加载有了较为详细的了解。<br>下面我们来总结一些Linux操作系统的一些内容，首先要明确操作系统主要只做一件事情就是资源管理，包括存储资源和处理资源。<br>存储资源这一系列我们没有主要涉及，实际上就是对内存和外部存储器比如硬盘的管理。这部分的内容大体上就是一个调度的问题，实际上处理资源也是个调度的问题，所以我们也可以说操作系统就是一个解决资源调度的软件。那么存储资源的调度实际上是由于存储结构分层所导致的。举个简单的例子CPU的缓存（catch）很快但是不大，内存呢比他大但是比他慢一些，一个作业或者程序不可能完全调入catch中，但是运行时候CPU是直接从catch中取数据和指令的，所以有的时候程序的一些执行指令和数据在内存中却不在catch中，这个时候就需要从内存中调出此时用到的数据放入catch，这个调度是基于局部性原理的策略进行的。那么同样的事情也发生在内存和硬盘中间。这就是存储的管理。同时此部分还涉及外存到底如何组织大量的数据（文件结构、磁盘格式等）从而方便人们查找。<br>处理资源主要我们指的是程序的执行，我们知道程序的一个可执行实例是进程，里面包含了代码可以运行的最基本数据集合。那么从时间的维度上看，操作系统如何加载一个程序就是我们首先需要关心的，Linux中是把这个程序的执行地址的开头作为参数传递给操作系统然后由系统将它启动，系列文章中有涉及。从宏观的角度上看，任务或者说程序被实例化成很多的进程，作为允许多进程同时运行的系统，Linux是如何在进程之间进行切换的呢？实际上我们在文章中有介绍Linux进程创建和切换源代码的分析。这就好比你在做作业，比如你在做数学，用到了计算器，草算纸，做到一半你忽然需要看数学书了，这个时候你要记住你做到哪一个题、计算这个题的一些中间结果在草纸上要标记一下、看完书回来你才可以继续做这道题。进程切换也是这样的一个过程，包括中断处理也是这样的过程，你需要保存你正在做的这件事情的上下文（哪道题、计算的中间结果等等）然后再去做别的，这样保证你回来继续做的时候能够连贯不出错。这里面看出操作系统实际上在处理任务的时候和人有一定的相似性。从微观的角度来看，函数的调用也是上述这个过程，你需要知道怎么回到调用你的函数继续执行。系统调用也同样是这个思路。那么所有的这些保存的信息都是用堆栈完成的。<br>此外，再就是系统的启动过程和一些调试技巧。那么这一阶段的Linux内核分析初级系列就这样结束了，感谢USTC孟宁老师以及网易云课堂《Linux内核分析》课程，希望有兴趣的同学继续参加下一期的学期。</p>
+
       
     </div>
 
@@ -368,6 +415,14 @@
 
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/OS/" rel="tag"># OS</a>
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+        </div>
       
 
       
@@ -452,8 +507,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -481,7 +545,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -535,6 +599,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一周：计算机是如何工作的"><span class="nav-number">1.</span> <span class="nav-text">第一周：计算机是如何工作的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二周：操作系统是如何工作的"><span class="nav-number">2.</span> <span class="nav-text">第二周：操作系统是如何工作的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#通过mykernel操作系统的演示和代码的分析，从宏观调度算法等角度表现操作系统的运行过程及其对各个进程的切换过程。"><span class="nav-number">2.1.</span> <span class="nav-text">通过mykernel操作系统的演示和代码的分析，从宏观调度算法等角度表现操作系统的运行过程及其对各个进程的切换过程。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第三周：构造一个简单的Linux系统MenuOS"><span class="nav-number">3.</span> <span class="nav-text">第三周：构造一个简单的Linux系统MenuOS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第四周：扒开系统调用的三层皮（上）"><span class="nav-number">4.</span> <span class="nav-text">第四周：扒开系统调用的三层皮（上）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第五周-扒开系统调用的三层皮（下）"><span class="nav-number">5.</span> <span class="nav-text">第五周:扒开系统调用的三层皮（下）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第六周：进程的描述和进程的创建"><span class="nav-number">6.</span> <span class="nav-text">第六周：进程的描述和进程的创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第七周：Linux中可执行程序的装载"><span class="nav-number">7.</span> <span class="nav-text">第七周：Linux中可执行程序的装载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第八周：进程的切换和系统的一般执行过程"><span class="nav-number">8.</span> <span class="nav-text">第八周：进程的切换和系统的一般执行过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#心得总结："><span class="nav-number">9.</span> <span class="nav-text">心得总结：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
     </div>

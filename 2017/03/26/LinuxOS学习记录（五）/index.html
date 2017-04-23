@@ -101,7 +101,7 @@
 <meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson5745167-20160324094937042-541826164.jpg">
 <meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson5745167-20160324095027214-1000490314.jpg">
 <meta property="og:image" content="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson5system_call%E6%B5%81%E7%A8%8B%E5%9B%BE.bmp">
-<meta property="og:updated_time" content="2017-03-26T13:12:30.294Z">
+<meta property="og:updated_time" content="2017-04-23T13:16:20.112Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LinuxOS学习记录（五）">
 <meta name="twitter:description" content="分析system_call中断处理过程">
@@ -321,8 +321,8 @@
                 <i class="fa fa-calendar-check-o"></i>
               </span>
               <span class="post-meta-item-text">更新于</span>
-              <time title="更新于" itemprop="dateModified" datetime="2017-03-26T21:12:30+08:00">
-                2017-03-26
+              <time title="更新于" itemprop="dateModified" datetime="2017-04-23T21:16:20+08:00">
+                2017-04-23
               </time>
             
           </span>
@@ -412,7 +412,7 @@
 </ul>
 <p>从system_call开始到iret结束之间的整个过程，可以用流程图表示如下：</p>
 <p><img src="http://oiwadb81v.bkt.clouddn.com/image/Linux/lesson5system_call%E6%B5%81%E7%A8%8B%E5%9B%BE.bmp" alt=""></p>
-<h2 id="四、总结理解"><a href="#四、总结理解" class="headerlink" title="四、总结理解"></a>四、总结理解</h2><p>在系统调用返回之前，可能会发生进程调度（call_schedule），其中可能还会发生中断上下文的切换和进程上下文的切换；</p>
+<h2 id="四、总结理解"><a href="#四、总结理解" class="headerlink" title="四、总结理解"></a>四、总结理解</h2><p>在系统调用返回之前，可能会发生进程调度（<code>call_schedule</code>），其中可能还会发生中断上下文的切换和进程上下文的切换；</p>
 <p>在当前进程的时候，有些信号可能需要处理；</p>
 <p>使用gdb可以方便的跟踪内核执行进度，但对于汇编代码部分则不方便跟踪；</p>
 <p>内核可以抽象成是很多种不同的中断处理过程的集合。</p>
@@ -570,7 +570,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
